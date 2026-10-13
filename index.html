@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>DONIC · Generalist Dexterous Bimanual Tracking</title>
+  <meta name="description" content="DONIC: one policy that tracks diverse human bimanual demonstrations on unseen trajectories and unseen objects, trained with the BiHOI multi-view dataset.">
+  <meta property="og:title" content="DONIC · Generalist Dexterous Bimanual Tracking Control">
+  <meta property="og:description" content="One checkpoint. Two hands. Unseen trajectories and objects without fine-tuning.">
+  <meta property="og:image" content="assets/hero/hero_wall.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B191B'/%3E%3Crect x='12' y='22' width='17' height='17' rx='4' fill='%23CCFFA0'/%3E%3Crect x='35.5' y='23.5' width='14' height='14' rx='3' fill='none' stroke='%23CCFFA0' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..700&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script defer src="assets/js/content.js"></script>
+  <script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<a class="skip" href="#film">Skip to content</a>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="DONIC, back to top"><span class="mark" aria-hidden="true"><i></i><i></i></span>DONIC</a>
+  <nav aria-label="Sections">
+    <a href="#film">Film</a><a href="#gallery">Gallery</a><a href="#bihoi">BiHOI</a><a href="#unseen">Unseen</a><a href="#method">Method</a><a href="#compare">Compare</a><a href="#results">Results</a>
+  </nav>
+  <a class="pill" id="nav-paper" href="#results">Paper</a>
+</header>
+
+<main>
+  <!-- ============================================================ HERO -->
+  <section class="hero" id="top">
+    <video class="hero-wall" src="assets/hero/hero_wall.mp4" poster="assets/hero/hero_wall.jpg" autoplay muted loop playsinline aria-hidden="true"></video>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-in">
+      <p class="kicker">ONE POLICY&nbsp;&nbsp;·&nbsp;&nbsp;TWO HANDS</p>
+      <h1>DONIC</h1>
+      <p class="subtitle">Generalist Dexterous <span class="hl">Bimanual</span> Tracking Control<br class="br-wide"> from Human Demonstrations</p>
+
+      <div class="tape" id="tape" aria-label="Key facts">
+        <div class="tape-lanes" aria-hidden="true"><span>L</span><span>R</span></div>
+        <div class="tape-cells" id="tape-cells"></div>
+      </div>
+
+      <div class="cta">
+        <a class="btn btn-solid" href="#film"><span aria-hidden="true">▶</span> Watch the film</a>
+        <a class="btn" id="hero-paper" href="#results">Paper</a>
+        <a class="btn" href="#bihoi">BiHOI dataset</a>
+      </div>
+      <p class="authors" id="authors"></p>
+    </div>
+    <dl class="hero-stats" aria-label="BiHOI at a glance">
+      <div><dt>sequences</dt><dd>1,575</dd></div>
+      <div><dt>objects</dt><dd>229</dd></div>
+      <div><dt>interaction</dt><dd>14.77<small> h</small></dd></div>
+      <div><dt>cameras</dt><dd>32</dd></div>
+      <div><dt>unseen-traj SR</dt><dd class="hl">86.79<small>%</small></dd></div>
+      <div><dt>unseen-obj SR</dt><dd class="hl">57.32<small>%</small></dd></div>
+    </dl>
+  </section>
+
+  <!-- ============================================================ FILM -->
+  <section class="section" id="film">
+    <div class="wrap">
+      <div class="film">
+        <video id="film-video" src="assets/film/DONIC_film.mp4" poster="assets/film/poster.jpg" preload="none" playsinline controls hidden></video>
+        <button class="film-cover" id="film-cover" type="button" aria-label="Play the DONIC film">
+          <img src="assets/film/poster.jpg" alt="" loading="lazy">
+          <span class="play" aria-hidden="true"></span>
+          <span class="film-chip"><b id="film-len">1:24</b>&nbsp;·&nbsp;SOUND ON</span>
+          <span class="film-corner">SUPPLEMENTARY</span>
+        </button>
+      </div>
+      <div class="note">
+        <span class="note-tag">A NOTE</span>
+        <p><b>Simulation rollouts.</b> Every rollout on this page is a DONIC policy execution in Isaac Gym. The unseen-object cases track references whose objects were held out from training, without fine-tuning.</p>
+        <p><b>Same policy, both hands.</b> A single network controls the left and right hand together; the reference decides when each hand engages the object.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ GALLERY -->
+  <section class="section" id="gallery">
+    <div class="wrap">
+      <p class="eyebrow">Gallery</p>
+      <h2>One checkpoint. <span class="hl">Many bimanual interactions.</span></h2>
+    </div>
+    <div class="strip" id="strip-a"></div>
+    <div class="strip reverse" id="strip-b"></div>
+    <div class="wrap"><p class="fine">Tags mark where a reference comes from: <b>unseen object</b> clips involve objects held out from training, <b>BiHOI</b> clips come from our multi-view captures, and <b>comparison</b> clips reappear side by side below. Hover to pause.</p></div>
+  </section>
+
+  <!-- ============================================================ BiHOI -->
+  <section class="section" id="bihoi">
+    <div class="wrap">
+      <p class="eyebrow">BiHOI dataset</p>
+      <h2>1,575 bimanual sequences. <span class="hl">Captured from 32 views.</span></h2>
+      <div class="split">
+        <div>
+          <p class="lede">32 calibrated RGB cameras surround a tabletop workspace and record at 1920&nbsp;×&nbsp;1232 pixels and 30&nbsp;fps. We reconstruct both hands and the manipulated object, then retarget the motion to robot hands.</p>
+          <dl class="stats" id="dataset-stats"></dl>
+        </div>
+        <figure class="chart">
+          <figcaption><b>Both hands in contact.</b> Share of contact frames in which both hands touch the object, from Table&nbsp;1 of the paper.</figcaption>
+          <div class="bars" id="contact-bars" role="img" aria-label="Bimanual contact share by dataset"></div>
+        </figure>
+      </div>
+      <div class="viewer" data-viewer="capture" aria-label="From human capture to robot control"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ UNSEEN -->
+  <section class="section" id="unseen">
+    <div class="wrap">
+      <p class="eyebrow">Generalization</p>
+      <h2>New objects. <span class="hl">No fine-tuning.</span></h2>
+      <p class="lede">Held-out objects from public datasets, from the human recording to the learned bimanual execution. Shorter source clips hold their final frame.</p>
+      <div class="viewer" data-viewer="unseen" aria-label="Unseen-object tracking"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ METHOD -->
+  <section class="section" id="method">
+    <div class="wrap">
+      <p class="eyebrow">Method</p>
+      <h2>One shared policy. <span class="hl">Verified demonstrations in the loop.</span></h2>
+      <button class="pipeline" id="pipeline-open" type="button" aria-label="Enlarge the DONIC pipeline">
+        <img src="assets/media/pipeline.png" alt="DONIC pipeline: BiHOI recordings are reconstructed and retargeted into references; one policy controls both hands in simulation; learning combines an object-centered per-hand reward, Clip-Centered Advantages and behavior cloning from verified demonstrations." loading="lazy" width="2800" height="1576">
+        <span>Enlarge ↗</span>
+      </button>
+      <div class="cards">
+        <article><span class="tag-letter">A</span><h3>Object-centered per-hand reward</h3><p>Object tracking stays active throughout the motion, while each hand is supervised by the contacts its reference demands, so one hand's progress is not masked by the other.</p></article>
+        <article><span class="tag-letter">B</span><h3>Clip-Centered Advantages</h3><p>Subtracting each clip's mean estimated advantage before the PPO update removes reference-dependent offsets while keeping the differences within a clip.</p></article>
+        <article><span class="tag-letter">C</span><h3>PPO + behavior cloning</h3><p>Successful executions are replay-verified and recycled into a demonstration library that supplies behavior-cloning targets in later updates.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ COMPARE -->
+  <section class="section" id="compare">
+    <div class="wrap">
+      <p class="eyebrow">Side by side</p>
+      <h2>Follow the object. <span class="hl">Coordinate both hands.</span></h2>
+      <p class="lede">DONIC against bimanual adaptations of DexTrack and Dexplore, trained on the same data pool in the same simulator. One transport drives all four views.</p>
+      <div class="viewer" data-viewer="comparison" aria-label="Bimanual tracking comparison"></div>
+      <p class="fine">Dexplore-bi and DONIC share the reference conversion; DexTrack-bi uses its own converted reference and scene, so camera views are not spatially aligned. Playback loops at the longest clip.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ RESULTS -->
+  <section class="section" id="results">
+    <div class="wrap">
+      <p class="eyebrow">Results</p>
+      <h2>One checkpoint. <span class="hl">Both held-out splits.</span></h2>
+      <div class="split-tabs" role="group" aria-label="Evaluation split">
+        <button type="button" data-split="trajectory" aria-pressed="true">Unseen trajectories <span id="n-traj"></span></button>
+        <button type="button" data-split="object" aria-pressed="false">Unseen objects <span id="n-obj"></span></button>
+      </div>
+      <div class="scoreboard">
+        <div class="big">
+          <div class="digits" id="big-digits" aria-live="polite"></div>
+          <p class="big-label" id="big-label"></p>
+          <p class="big-delta" id="big-delta"></p>
+        </div>
+        <div class="sr-bars" id="sr-bars"></div>
+      </div>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Table 2: reference tracking without fine-tuning">
+        <table id="results-table">
+          <thead><tr>
+            <th scope="col">Method</th>
+            <th scope="col"><i>T</i><sub>o</sub> ↓<span>cm</span></th>
+            <th scope="col"><i>R</i><sub>o</sub> ↓<span>rad</span></th>
+            <th scope="col"><i>T</i><sub>h</sub> ↓<span>cm</span></th>
+            <th scope="col"><i>R</i><sub>h</sub> ↓<span>rad</span></th>
+            <th scope="col"><i>E</i><sub>finger</sub> ↓<span>rad</span></th>
+            <th scope="col">SR ↑<span>%</span></th>
+            <th scope="col">Comp ↑<span>%</span></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="fine">Table 2 of the paper. Metrics follow AdaDexTrack, extended to two hands: hand errors use the worse hand, and a clip succeeds only if both hands meet the thresholds. Best value per column in lime.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ CITE -->
+  <section class="section" id="cite">
+    <div class="wrap">
+      <p class="eyebrow">Team</p>
+      <div class="team" id="team"></div>
+      <p class="eyebrow cite-eyebrow">Citation</p>
+      <div class="bib">
+        <pre id="bibtex"></pre>
+        <button type="button" class="btn" id="copy-bib">Copy</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <a class="brand" href="#top"><span class="mark" aria-hidden="true"><i></i><i></i></span>DONIC</a>
+  <p>Generalist Dexterous Bimanual Tracking Control from Human Demonstrations · Ropedia</p>
+  <a href="#top">Back to top ↑</a>
+</footer>
+
+<dialog id="pipeline-dialog" aria-label="DONIC pipeline, full size">
+  <div class="dialog-bar"><b>DONIC · pipeline</b><button type="button" id="pipeline-close">Close ✕</button></div>
+  <div class="dialog-body"><img src="assets/media/pipeline.png" alt="Full-size DONIC pipeline" loading="lazy"></div>
+</dialog>
+<noscript><p class="noscript">Turn on JavaScript to choose cases and play the synchronized views. All videos are in assets/media.</p></noscript>
+</body>
+</html>
