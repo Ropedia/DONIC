@@ -30,9 +30,7 @@
   <img src="https://img.shields.io/badge/🤗_BiHOI-coming_soon-f0c000" alt="BiHOI dataset coming soon">
 </p>
 
-<p align="center">
-  <a href="./demo.mp4"><img src="assets/teaser.gif" alt="DONIC: one policy tracking diverse human bimanual demonstrations" width="100%"></a>
-</p>
+https://github.com/user-attachments/assets/13836832-63da-4767-8acb-2be188fbb6aa
 
 ## Release
 
