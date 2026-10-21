@@ -1,0 +1,58 @@
+cff-version: 1.2.0
+message: "If you use DONIC, please cite this technical report."
+title: "DONIC: Generalist Dexterous Bimanual Tracking Control from Human Demonstrations"
+type: software
+authors:
+  - family-names: Sun
+    given-names: Mingze
+  - family-names: Cao
+    given-names: Ziang
+  - family-names: Fei
+    given-names: Yuan
+  - family-names: Tao
+    given-names: Qiankuan
+  - family-names: Wang
+    given-names: Zihan
+  - family-names: Liu
+    given-names: Tianqi
+  - family-names: Chen
+    given-names: Junhao
+  - family-names: Diao
+    given-names: Haiwen
+  - family-names: Hong
+    given-names: Fangzhou
+  - family-names: Chen
+    given-names: Zhaoxi
+  - family-names: Liu
+    given-names: Ziwei
+year: 2026
+url: "https://ropedia.github.io/DONIC/"
+repository-code: "https://github.com/Ropedia/DONIC"
+preferred-citation:
+  type: article
+  title: "DONIC: Generalist Dexterous Bimanual Tracking Control from Human Demonstrations"
+  authors:
+    - family-names: Sun
+      given-names: Mingze
+    - family-names: Cao
+      given-names: Ziang
+    - family-names: Fei
+      given-names: Yuan
+    - family-names: Tao
+      given-names: Qiankuan
+    - family-names: Wang
+      given-names: Zihan
+    - family-names: Liu
+      given-names: Tianqi
+    - family-names: Chen
+      given-names: Junhao
+    - family-names: Diao
+      given-names: Haiwen
+    - family-names: Hong
+      given-names: Fangzhou
+    - family-names: Chen
+      given-names: Zhaoxi
+    - family-names: Liu
+      given-names: Ziwei
+  journal: "Ropedia Technical Report"
+  year: 2026
