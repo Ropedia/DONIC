@@ -17,14 +17,11 @@ window.DONIC = {
     codeUrl: '',
     datasetUrl: '',
     bibtex:
-`@misc{sun2026donic,
-  title        = {DONIC: Generalist Dexterous Bimanual Tracking Control
-                  from Human Demonstrations},
-  author       = {Mingze Sun and Ziang Cao and Yuan Fei and Qiankuan Tao and
-                  Zihan Wang and Tianqi Liu and Junhao Chen and Haiwen Diao and
-                  Fangzhou Hong and Zhaoxi Chen and Ziwei Liu},
-  year         = {2026},
-  howpublished = {https://donic-project.github.io}
+`@article{sun2026donic,
+  title   = {DONIC: Generalist Dexterous Bimanual Tracking Control from Human Demonstrations},
+  author  = {Sun, Mingze and Cao, Ziang and Fei, Yuan and Tao, Qiankuan and Wang, Zihan and Liu, Tianqi and Chen, Junhao and Diao, Haiwen and Hong, Fangzhou and Chen, Zhaoxi and Liu, Ziwei},
+  journal = {Ropedia Technical Report},
+  year    = {2026}
 }`
   },
 
