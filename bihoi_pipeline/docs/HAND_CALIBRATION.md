@@ -6,7 +6,7 @@ Hand calibration is a one-time, per-collector setup step. It estimates the colle
 
 `run_hand_calibration_args.sh` (or the WebUI calibration panel) runs:
 
-1. `rename_videos_31cams.py --strict-calibration`: copy the 31 calibration videos into an isolated workspace as `1.mp4` ... `31.mp4`, following `CALIB_CAMERA_ORDER` exactly. The source videos are never modified. Ambiguous, extra or missing cameras are rejected.
+1. `rename_videos_31cams.py --strict-calibration`: copy the calibration videos into an isolated workspace as `1.mp4`, `2.mp4`, ..., following `CALIB_CAMERA_ORDER` exactly. The source videos are never modified. Ambiguous, extra or missing cameras are rejected.
 2. `rename_videos_extract_frames_ffmpeg_pts_compat_resize.py --skip-rename`: extract 640×360 images at 10 FPS from the selected half-open time interval.
 3. `WiLoR/demo.py`: 2D hand detections in `annots_fallback/<camera>/000000.json`. This requires the separately licensed WiLoR variant (see [THIRD_PARTY.md](../THIRD_PARTY.md)).
 4. `apps/demo/mv1p713.py`: multi-view triangulation with fallback 2D recovery, using `handr/manor` for the right hand or `handl/manol` for the left hand.
@@ -16,9 +16,9 @@ Hand calibration is a one-time, per-collector setup step. It estimates the colle
 
 ## Calibration camera naming
 
-The input folder is `<Hand Calibration Root>/<capture>/videos/`. Supply exactly **31 `.mp4` videos** named after the calibrated cameras. The conversion is 1-based: `node13_cam0.mp4` → `1.mp4`, `node13_cam1.mp4` → `2.mp4`, `node25_cam1.mp4` → `3.mp4`, ... `node47_cam1.mp4` → `31.mp4`. The full list is `CALIB_CAMERA_ORDER` in `pipeline/rename_videos_31cams.py`.
+The input folder is `<Hand Calibration Root>/<capture>/videos/`. Supply **one `.mp4` video per calibrated camera**, named after that camera; every camera in the list must be present. The conversion is 1-based and follows the list order: `node13_cam0.mp4` → `1.mp4`, `node13_cam1.mp4` → `2.mp4`, `node25_cam1.mp4` → `3.mp4`, and so on. The full list is `CALIB_CAMERA_ORDER` in `pipeline/rename_videos_31cams.py`.
 
-A complete `1.mp4` ... `31.mp4` or `rpizero000_test*.mp4` ... `rpizero030_test*.mp4` capture is also accepted. In strict calibration mode, filename guessing, unknown cameras and missing cameras are errors. `intri.yml` and `extri.yml` must use the same numbered camera order.
+A complete numbered capture (`1.mp4`, `2.mp4`, ...) or a complete `rpizero000_test*.mp4`, `rpizero001_test*.mp4`, ... capture is also accepted. In strict calibration mode, filename guessing, unknown cameras and missing cameras are errors. `intri.yml` and `extri.yml` must use the same numbered camera order.
 
 ## Collector mapping and output
 

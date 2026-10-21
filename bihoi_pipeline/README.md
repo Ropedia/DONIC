@@ -12,7 +12,7 @@ The multi-view hand–object interaction processing pipeline used to build the *
 
 | Setting | Value |
 | --- | --- |
-| Camera streams | 31 synchronized cameras, in the order fixed by `pipeline/rename_videos_31cams.py` ([camera names](docs/DATA_FORMAT.md)) |
+| Cameras | Synchronized multi-view cameras, in the calibrated order fixed by `pipeline/rename_videos_31cams.py` ([camera names](docs/DATA_FORMAT.md)) |
 | Processing rate | **10 FPS** (required by the Hands and Final stages; input videos may have any native rate) |
 | Processing resolution | **640×360** by default |
 | Final export | resampled to 30 FPS in `standardized_hoi_30fps/`; the first 500 output frames by default |
@@ -132,7 +132,7 @@ data/
                 ├── take01/
                 │   ├── node13_cam0.mp4
                 │   ├── node13_cam1.mp4
-                │   └── ...                  # 31 synchronized camera videos
+                │   └── ...                  # one video per calibrated camera
                 └── take02/                  # optional additional take
 ```
 
