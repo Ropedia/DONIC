@@ -1,0 +1,10 @@
+# Portable packaging metadata; installation pins live in environments/.
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "sam3d_objects"
+version = "0.0.1"
+requires-python = ">=3.11"
+[tool.setuptools.packages.find]
+include = ["sam3d_objects*"]

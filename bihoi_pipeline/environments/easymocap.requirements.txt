@@ -1,0 +1,20 @@
+# Direct pipeline dependencies; native builds are installed separately.
+chumpy @ git+https://github.com/mattloper/chumpy.git@580566eafc9ac68b2614b64d6f7aaa84eebb70da
+func-timeout==4.3.5
+ipdb==0.13.13
+joblib==1.5.3
+matplotlib==3.9.4
+numpy==1.26.4
+opencv-python==4.8.1.78
+pillow==11.3.0
+pyopengl==3.1.0
+pyrender==0.1.45
+pyyaml==6.0.3
+scikit-image==0.24.0
+scipy==1.13.1
+smplx==0.1.28
+tabulate==0.9.0
+termcolor==3.1.0
+tqdm==4.70.0
+trimesh==4.12.2
+yacs==0.1.8

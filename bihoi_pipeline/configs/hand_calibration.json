@@ -1,0 +1,8 @@
+{
+  "datasets": {
+    "hands_collector01": {
+      "person_name": "collector01",
+      "evidence": "Example mapping: calibration capture hands_collector01 belongs to collector collector01. Add one entry per data collector, or pass --person_name."
+    }
+  }
+}

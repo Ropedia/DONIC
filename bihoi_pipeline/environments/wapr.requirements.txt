@@ -1,0 +1,14 @@
+# Observed direct dependencies for the validated PyTorch backend.
+# PyTorch / torchvision are installed separately from the CUDA 12.8 index.
+numpy==1.26.4
+scipy==1.17.1
+opencv-python==4.11.0.86
+trimesh==5.1.0
+pybind11==3.1.0
+kornia==0.8.3
+pillow==12.3.0
+onnx==1.17.0
+huggingface-hub==0.36.2
+threadpoolctl==3.6.0
+imageio==2.37.4
+imageio-ffmpeg==0.6.0

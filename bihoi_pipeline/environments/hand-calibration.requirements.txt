@@ -1,0 +1,6 @@
+# Additional dependencies for FMHR; use the existing easymocap environment.
+plyfile==1.1.3
+pyzmq==27.2.0
+# Install psbody-mesh externally only after accepting licenses/psbody-mesh.txt.
+# Its source/binaries are not redistributed by this repository.
+psbody-mesh @ git+https://github.com/MPI-IS/mesh.git@49e70425cf373ec5269917012bda2944215c5ccd

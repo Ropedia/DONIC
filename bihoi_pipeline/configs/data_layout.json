@@ -1,0 +1,18 @@
+{
+  "data_kind": "rigid",
+  "primary_take": "take01",
+  "raw_take_directory": "videos/takeXX",
+  "secondary_output_directory": "takes/takeXX",
+  "default_processing_fps": 10,
+  "default_image_width": 640,
+  "default_image_height": 360,
+  "depth_units_per_meter": 1000,
+  "standardized_export_fps": 30,
+  "default_standardized_export_frames": 500,
+  "rig_calibration_files": [
+    "intri.yml",
+    "extri.yml",
+    "corrected_gsformat.pkl"
+  ],
+  "person_prior_file": "calib/restored_flat_real_scale.pt"
+}

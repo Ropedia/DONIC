@@ -1,0 +1,7 @@
+The eight Conda specs pin the actual Python and selected Conda bootstrap/build packages. Direct requirements pin observed inference packages and required native-library metadata dependencies; optional training-only dependencies are not blindly exported. Native/VCS sources are recorded in observed.json.
+
+handobj_webui.lock.txt was resolved and installed successfully in a fresh isolated Python 3.10 virtual environment on the packaging host; pip check, package tests, and localhost startup passed. Its complete transitive set is intentionally bounded to the freshly installed UI. The clean Conda solver path and seven clean GPU environments remain untested. Conda CMake pybind11=3.1.0 and the observed FoundationPose pip pybind11=2.12.0 differ in the original environment; the build script explicitly uses the active Python package's CMake directory.
+
+Native builds require per-environment matching CUDA toolkits. The package installer never mutates original/unmanaged environments. System libraries and model assets are separately documented. Proposed additions and unobserved optional packages remain identified in observed.json.
+
+Hand Calibration reuses easymocap and wilor, with optional `hand-calibration.requirements.txt` extras. Install through `scripts/install_hand_calibration_deps.sh` after accepting the external psbody-mesh terms. Existing environments were reused without package changes for the real calibration; clean installation of these extra native requirements remains untested.

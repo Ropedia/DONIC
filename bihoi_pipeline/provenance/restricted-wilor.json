@@ -1,0 +1,116 @@
+{
+  "source": "WiLoR",
+  "upstream": "https://github.com/rolpotamias/WiLoR.git",
+  "upstream_commit": "fcb911312a38fa8badd30d9656a167485d61b8f9",
+  "policy": "Local-only import; current modified files are not redistributed under CC-BY-NC-ND.",
+  "required_files": [
+    {
+      "path": "demo_fast.py",
+      "sha256": "12ed9da478cde54531f889d7f5d7551bc485ec914ce05babe19411be39c1b3c4"
+    },
+    {
+      "path": "license.txt",
+      "sha256": "0bb835f5ed7272947a23d92d0e74bbdadcbf0beb9235c0735c32d1310a4bceda"
+    },
+    {
+      "path": "pretrained_models/model_config.yaml",
+      "sha256": "64e75699eb7f1234ee16ba1bbb983db35e03f584fe4bd524559432b1efec3d2c"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "16e569b5e6284b09a67a6ff1a2ab8dfa49aa6a01d8915029afdeb7b31481dc02"
+    },
+    {
+      "path": "wilor/configs/__init__.py",
+      "sha256": "2570cce9c9bf45b46fbe53b94b57655638d90fe6a3183854a766cf128eedb3ba"
+    },
+    {
+      "path": "wilor/datasets/utils.py",
+      "sha256": "24229bd14758b5f73a3531ceb73f4c93f3955278df21800f5a34115221e534fd"
+    },
+    {
+      "path": "wilor/datasets/vitdet_dataset.py",
+      "sha256": "e525c2dde01c90180eafab4fcfad6bc1bcc94b64597385f1776fc460e4af40f3"
+    },
+    {
+      "path": "wilor/models/__init__.py",
+      "sha256": "adfb0cfe1bb870afb973f55ffed2dcf6750aeaf14e5dd69146f8c1c0a8997921"
+    },
+    {
+      "path": "wilor/models/backbones/__init__.py",
+      "sha256": "f4e16992c4890acb10ce5c5f8646e7e2419d28582085efd3558e96ffa1a2c487"
+    },
+    {
+      "path": "wilor/models/backbones/vit.py",
+      "sha256": "5424ff143d2a8db9f0a722da34857bff2559c4867d9295fb3648e0293f5de013"
+    },
+    {
+      "path": "wilor/models/discriminator.py",
+      "sha256": "c72ed76c595d5c8350784093dc3332aaeff89a5821de0d218f7c344f9912d4c9"
+    },
+    {
+      "path": "wilor/models/heads/__init__.py",
+      "sha256": "788c3df4b0f0eecec99a4e94149f05cc00e03261564080c2be4952cfbf12ab62"
+    },
+    {
+      "path": "wilor/models/heads/refinement_net.py",
+      "sha256": "5878350b52af6c4cd27541ee02579ea7fe30549ef8e101a72fe2cf6a82eef59d"
+    },
+    {
+      "path": "wilor/models/losses.py",
+      "sha256": "53052f7589ead73531202548f452d294a3ae0a15d279a55a8508239ec282c311"
+    },
+    {
+      "path": "wilor/models/mano_wrapper.py",
+      "sha256": "dbe78558c3ccaa6deaba7731858565dcdd193fb0ee7b6543c059a07f0408239a"
+    },
+    {
+      "path": "wilor/models/wilor.py",
+      "sha256": "9744194093a8307d2fba26c4a85edd39d99e1a556f3867372b62d29bce514fdc"
+    },
+    {
+      "path": "wilor/utils/__init__.py",
+      "sha256": "a668095eb88cbd5c2b9015d7bf4ae51c12a899e738609c248af9c687791d563d"
+    },
+    {
+      "path": "wilor/utils/geometry.py",
+      "sha256": "9eb08e438622a36f3bc40d3fd48b776022b80ee26406f0d826d7b7132821e778"
+    },
+    {
+      "path": "wilor/utils/mesh_renderer.py",
+      "sha256": "9825b4c4c50ed1020b4cab3db2135e0f88a8eb5616a5ab0bd84a44049d749253"
+    },
+    {
+      "path": "wilor/utils/misc.py",
+      "sha256": "5e1bc5edea3a9792e315189a9e5761cd9c87ba03e269d12585ffe8662a9beaba"
+    },
+    {
+      "path": "wilor/utils/pose_utils.py",
+      "sha256": "5bc11827ca90d8757eb273ca72ec2d430ccd8cd24c6695da1c98853b5cc3b818"
+    },
+    {
+      "path": "wilor/utils/pylogger.py",
+      "sha256": "c8a816419a6b61389321f971427e1b88f7fda0345ae49f579318abdcb8349296"
+    },
+    {
+      "path": "wilor/utils/render_openpose.py",
+      "sha256": "420563f3d6869a2ce25257176ecb73d58c8409ce37b2ef2f3631893eabe7cdd4"
+    },
+    {
+      "path": "wilor/utils/renderer.py",
+      "sha256": "148a78219241740821d8f0516fd391b1eac09d44237d12a4f28bbcb91f2c8019"
+    },
+    {
+      "path": "wilor/utils/rich_utils.py",
+      "sha256": "4634c280ef2f3f4e52ad20e319d89e4ba45cd1137fc6ba47e122898e932f4d00"
+    },
+    {
+      "path": "wilor/utils/skeleton_renderer.py",
+      "sha256": "a8818691fb88bf46cc5f3ac9fcc85cdf6c3ed54322882557ed5c5cb7b4c08557"
+    },
+    {
+      "path": "demo.py",
+      "sha256": "1543632a9b7cddbbce1a5f94c671ae8a01e97c5f3549ffabe2bd984f92c44361"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "mano_dir": ".models/mano",
+  "crop_margin": 1.22,
+  "supersampling": 2,
+  "left_color": [
+    0.8,
+    0.035,
+    0.035,
+    1.0
+  ],
+  "right_color": [
+    0.035,
+    0.16,
+    0.8,
+    1.0
+  ],
+  "object_color": [
+    0.6,
+    0.6,
+    0.6,
+    1.0
+  ],
+  "object_material": "source",
+  "ambient_light": [
+    0.38,
+    0.38,
+    0.38
+  ],
+  "light_intensity": 2.0,
+  "light_offsets_degrees": [
+    [
+      -4,
+      -4
+    ],
+    [
+      -4,
+      4
+    ],
+    [
+      4,
+      -4
+    ],
+    [
+      4,
+      4
+    ]
+  ]
+}

@@ -1,0 +1,1 @@
+Supply operator-owned intri.yml, extri.yml and corrected_gsformat.pkl under HOI_CALIBRATION_DIR. This directory contains instructions only, never real calibration. YAML matrix schemas and the exact camera order are described in docs/DATA_FORMAT.md. Do not use identity/synthetic test matrices for real reconstruction.

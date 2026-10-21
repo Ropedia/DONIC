@@ -1,0 +1,14 @@
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11.16
+  - pip=26.2.1
+  - setuptools=84.0.0
+  - wheel=0.48.0
+  - cmake=4.4.3
+  - ninja=1.13.2
+  - c-compiler=1.10.0
+  - cxx-compiler=1.10.0
+  - eigen=5.0.1
+  - boost-cpp=1.85.0
+  - pybind11=3.1.0

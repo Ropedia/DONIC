@@ -1,0 +1,14 @@
+# Direct pipeline dependencies; native builds are installed separately.
+chumpy @ git+https://github.com/mattloper/chumpy.git@580566eafc9ac68b2614b64d6f7aaa84eebb70da
+imageio==2.37.4
+matplotlib==3.10.9
+numpy==1.26.4
+opencv-python==4.11.0.86
+pillow==12.3.0
+pyopengl==3.1.0
+pyrender==0.1.45
+pyyaml==6.0.3
+scipy==1.15.3
+smplx==0.1.28
+tqdm==4.70.1
+trimesh==5.1.0

@@ -1,0 +1,22 @@
+# Additional dependencies for the 2D detector source trees; not bundled in WAPR.
+# 2D 检测器源码所需的附加依赖；这些库不会打入 WAPR wheel。
+# Prepare torchvision matching your installed torch before running the installer.
+# 运行安装脚本前，自行准备与当前 torch 匹配的 torchvision。
+transformers>=4.36,<5
+timm
+addict
+yapf
+pycocotools
+scipy
+matplotlib
+pandas
+seaborn
+psutil
+py-cpuinfo
+PyYAML
+requests
+tqdm
+safetensors
+ultralytics>=8.3.70,<9
+# Bootstrap resolves these versions against the installed Torch before installing.
+# Bootstrap 按已有 Torch 解析版本后再安装；此清单不替代兼容性检查。

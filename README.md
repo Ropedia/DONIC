@@ -32,16 +32,23 @@
 
 https://github.com/user-attachments/assets/13836832-63da-4767-8acb-2be188fbb6aa
 
-## Release
+## Repository structure
 
-The DONIC code will be released in this repository, together with the BiHOI
-dataset and DONIC policy weights.
+| Folder | Contents | Status |
+| --- | --- | --- |
+| [`bihoi_pipeline/`](bihoi_pipeline/README.md) | Multi-view hand–object interaction processing pipeline used to build BiHOI (masks, metric depth, object mesh, 6D object tracking, bimanual MANO hands, standardized export, WebUI) | available |
+| [`donic/`](donic/README.md) | DONIC training and evaluation code | coming soon |
+
+## Release
 
 | Resource | Status |
 | --- | --- |
+| BiHOI processing pipeline | [available](bihoi_pipeline/) |
 | DONIC training and evaluation code | coming soon |
 | 🤗 BiHOI dataset | coming soon |
 | DONIC policy weights | coming soon |
+
+The BiHOI pipeline is for non-commercial use and contains third-party code under its own licenses; see [`bihoi_pipeline/LICENSE`](bihoi_pipeline/LICENSE).
 
 ## Citation
 

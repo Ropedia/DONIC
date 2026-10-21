@@ -1,0 +1,77 @@
+{
+  "sam3": {
+    "repo": "facebook/sam3",
+    "revision": "3c879f39826c281e95690f02c7821c4de09afae7",
+    "files": {
+      "sam3.pt": "sam3.pt"
+    },
+    "gated": true
+  },
+  "sam2": {
+    "url": "https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_large.pt",
+    "file": "sam2.1_hiera_large.pt",
+    "gated": false
+  },
+  "da3": {
+    "repo": "depth-anything/DA3NESTED-GIANT-LARGE-1.1",
+    "revision": "b2359bdf726fb44ef62acca04d629dcf158053e7",
+    "files": {
+      "config.json": "config.json",
+      "model.safetensors": "model.safetensors"
+    },
+    "gated": false
+  },
+  "mv-sam3d": {
+    "repo": "facebook/sam-3d-objects",
+    "revision": "2e73555018d2741ccd486e56c24fac41155a1dc6",
+    "files": {
+      "checkpoints/ss_generator.ckpt": "ss_generator.ckpt",
+      "checkpoints/slat_generator.ckpt": "slat_generator.ckpt",
+      "checkpoints/ss_decoder.ckpt": "ss_decoder.ckpt",
+      "checkpoints/slat_decoder_gs.ckpt": "slat_decoder_gs.ckpt",
+      "checkpoints/slat_decoder_gs_4.ckpt": "slat_decoder_gs_4.ckpt",
+      "checkpoints/slat_decoder_mesh.ckpt": "slat_decoder_mesh.ckpt"
+    },
+    "gated": true
+  },
+  "moge": {
+    "repo": "Ruicheng/moge-vitl",
+    "revision": "ad326bfb61facd6c52b5a825bc1e34d7c97d9672",
+    "files": {
+      "model.pt": "model.pt"
+    },
+    "gated": false
+  },
+  "wilor": {
+    "repo": "rolpotamias/WiLoR",
+    "repo_type": "space",
+    "revision": "99fe3d7acff8104ecca1055df7467709506c2fa6",
+    "files": {
+      "pretrained_models/wilor_final.ckpt": "wilor_final.ckpt",
+      "pretrained_models/detector.pt": "detector.pt",
+      "mano_data/mano_mean_params.npz": "mano_mean_params.npz"
+    },
+    "gated": false
+  },
+  "foundationpose": {
+    "manual": "Obtain official weights from https://github.com/NVlabs/FoundationPose#download-weights. Keep version directories 2023-10-28-18-33-37 and 2024-01-11-20-02-45 with model_best.pth under .models/foundationpose. Use repository config templates."
+  },
+  "mano": {
+    "manual": "Register and accept MANO terms at https://mano.is.tue.mpg.de/. Place MANO_LEFT.pkl and MANO_RIGHT.pkl in .models/mano. Do not redistribute. Run bash scripts/prepare_mano_regressors.sh to derive the private joint tables locally. They are also model parameters and must not be redistributed.",
+    "required_files": [
+      "MANO_LEFT.pkl",
+      "MANO_RIGHT.pkl",
+      "J_regressor_mano_LEFT.txt",
+      "J_regressor_mano_RIGHT.txt"
+    ]
+  },
+  "fmhr": {
+    "manual": "Supply licensed FMHR gcn_left.pth, gcn_right.pth, TEMPLATE_LEFT.obj and TEMPLATE_RIGHT.obj under HOI_FMHR_MODEL_DIR (default .models/fmhr). No checkpoints or template meshes are distributed. Use both licensed MANO PKLs under HOI_MANO_DIR.",
+    "required_files": [
+      "gcn_left.pth",
+      "gcn_right.pth",
+      "TEMPLATE_LEFT.obj",
+      "TEMPLATE_RIGHT.obj"
+    ]
+  }
+}

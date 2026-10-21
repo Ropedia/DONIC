@@ -1,0 +1,42 @@
+BiHOI Pipeline — license overview
+
+This folder is a source aggregation. It is not relicensed under a single license,
+and no blanket commercial-use or redistribution permission is granted. Any license
+at the root of the DONIC repository does not apply to the third-party parts below.
+
+1. Code written for this pipeline
+
+   Copyright (c) 2026 Ropedia.
+   Licensed under the Creative Commons Attribution-NonCommercial 4.0 International
+   License (CC BY-NC 4.0); full text in licenses/CC-BY-NC-4.0.txt and at
+   https://creativecommons.org/licenses/by-nc/4.0/
+
+   This covers:
+   - webui/, scripts/, tests/, configs/ (except configs/models/)
+   - web_demos/ (except web_demos/third_party/)
+   - run_hand_calibration_args.sh and the top-level documentation
+   - the pipeline scripts we added under pipeline/ (for example the stage
+     wrappers pipeline/*.sh and the export, rendering and post-optimization
+     scripts in pipeline/FoundationPose/). Files under pipeline/FoundationPose/
+     are additionally subject to NVIDIA's FoundationPose license (item 2).
+
+2. Third-party code (vendored or modified)
+
+   Each component keeps its own license and copyright notices, mapped in
+   THIRD_PARTY.md with full texts in licenses/:
+   - Original EasyMocap code and modifications remain subject to licenses/EasyMocap.txt
+     (non-commercial).
+   - FoundationPose code is subject to NVIDIA's non-commercial license
+     (pipeline/FoundationPose/LICENSE).
+   - SAM3 and SAM3D use their supplied custom licenses; SAM2 and Depth Anything 3
+     code are Apache-2.0; FMHR is Apache-2.0.
+   - The modified WAPR core is LGPL-2.1-only; see web_demos/third_party/WAPR/LICENSE
+     and LOCAL_CHANGES.md.
+
+3. Not distributed here
+
+   - WiLoR-modified code (CC-BY-NC-ND-4.0). It requires a separate licensed local import.
+   - HO-Cap is installed externally under its upstream license; its source license
+     file says AGPL-3.0.
+   - Model weights, MANO assets, measured camera calibration and datasets. Their
+     separate licenses still apply.

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="WAPR 物体位姿估计与 MoSE3 稠密运动跟踪本地实验室">
+  <title>WAPR · Pose Lab</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Pose Lab 首页"><span class="brand-mark">◈</span><span>POSE LAB<small>视觉与运动实验室</small></span></a>
+    <div class="nav-label">实验工作台</div>
+    <nav aria-label="模型选择">
+      <a href="/wapr" data-app="wapr"><span class="nav-icon">⬡</span><span>WAPR<small>物体 6D 位姿估计</small></span><span class="nav-arrow">↗</span></a>
+      <a href="/mose3" data-app="mose3"><span class="nav-icon">⌁</span><span>MoSE3<small>视频稠密运动跟踪</small></span><span class="nav-arrow">↗</span></a>
+    </nav>
+    <div class="sidebar-note"><span class="dot"></span> 本地推理工作台<p>文件保存在运行服务的机器上。<br>模型由独立 Python 环境执行。</p></div>
+    <a id="repo-link" class="source-link" href="https://github.com/WangYuLin-SEU/WAPR" target="_blank" rel="noreferrer">查看官方项目 <span>↗</span></a>
+  </aside>
+  <main>
+    <header class="topbar"><span>工作空间 <span class="slash">/</span> <span id="breadcrumb">WAPR</span></span><span class="top-label">COMPUTER VISION · DEMO</span></header>
+    <div class="content">
+      <section class="hero">
+        <div><div class="eyebrow" id="eyebrow">RGB-D → 6D POSE</div><h1 id="title">让物体的位姿清晰可见<span>。</span></h1><p id="subtitle"></p></div>
+        <span class="model-tag" id="model-tag">WAPR<span>POSE ESTIMATION</span></span>
+      </section>
+      <div id="notice" class="notice" role="alert" hidden></div>
+      <form id="form">
+        <div class="workspace">
+          <section class="inputs panel">
+            <div class="panel-heading"><h2><span class="step">01</span> 输入与参数</h2><div><button type="button" id="example" class="text-button">载入样例</button><button type="button" id="reset" class="text-button">重置</button></div></div>
+            <div id="input-fields"></div>
+            <div class="run-area"><button class="primary" type="submit" id="run"><span>▶</span> 开始估计</button><button type="button" class="secondary" id="cancel" hidden>取消任务</button><p id="run-note">首次运行需要加载模型，可能需要几分钟。</p></div>
+          </section>
+          <section class="preview panel">
+            <div class="panel-heading"><h2><span class="step">02</span> 预览与结果</h2><span id="status" class="status" role="status">等待输入</span></div>
+            <div class="tabs" role="tablist" aria-label="预览切换"><button type="button" class="active" data-view="input" role="tab" aria-selected="true">输入预览</button><button type="button" data-view="result" role="tab" aria-selected="false">推理结果</button><button type="button" data-view="log" role="tab" aria-selected="false">运行日志</button></div>
+            <div id="input-view" class="view"><div class="preview-toolbar"><span id="preview-label">RGB 图像</span><span id="dimensions">尚未载入</span></div><div class="media-area" id="input-media"><div class="empty"><span class="empty-icon">⌗</span><h3 id="empty-title">从一张 RGB 图像开始</h3><p id="empty-text">上传后预览图像，并选择目标物体区域</p></div><canvas id="rgb-canvas" hidden aria-label="RGB 预览，可拖动框选目标"></canvas><video id="input-video" controls playsinline hidden></video></div>
+              <section id="point-picker" hidden aria-label="MoSE3 手动查询点">
+                <div class="frame-controls"><button type="button" id="previous-frame" aria-label="上一采样帧">←</button><input type="range" id="query-frame-slider" min="0" max="0" value="0" step="1" aria-label="选择查询帧"><button type="button" id="next-frame" aria-label="下一采样帧">→</button></div>
+                <p id="query-frame-label" class="hint" aria-live="polite"></p>
+                <div class="media-area"><canvas id="query-canvas" tabindex="0" aria-label="点击图像添加查询点"></canvas></div>
+                <div class="point-toolbar"><span id="point-count" aria-live="polite">已选 0 个点</span><div><button type="button" id="undo-point">撤销一点</button><button type="button" id="clear-points">清空</button></div></div>
+                <div id="point-list" class="point-list"></div>
+              </section><p id="preview-help" class="preview-help"></p></div>
+            <div id="result-view" class="view" hidden><div id="result-empty" class="empty"><span class="empty-icon">◈</span><h3>结果将在这里显示</h3><p>完成输入与参数配置后开始推理</p></div><div id="result-content" hidden><div id="result-tabs" class="result-tabs"></div><div id="result-media" class="media-area"></div><div id="metrics" class="metrics"></div><details class="result-detail"><summary>查看结构化结果</summary><pre id="result-json"></pre></details><div id="downloads" class="downloads"></div></div></div>
+            <div id="log-view" class="view" hidden><div class="log-heading"><span>INFERENCE CONSOLE</span><span>实时更新</span></div><pre id="log" aria-live="polite">暂无任务。开始推理后，日志会显示在这里。</pre></div>
+            <div class="preview-bottom"><span><i class="dot"></i> 实际模型输出</span><span id="output-type">4 × 4 位姿矩阵 · 叠加图 · PLY</span></div>
+          </section>
+        </div>
+      </form>
+      <section class="guide"><div><span class="guide-icon">ⓘ</span><div><h3 id="guide-title"></h3><p id="guide-text"></p></div></div><details><summary>运行环境</summary><pre id="environment">正在连接服务…</pre></details></section>
+      <footer><span>POSE LAB <span class="footer-divider">/</span> 本地视觉模型演示</span><span>输入 → 推理 → 可视化</span></footer>
+    </div>
+  </main>
+</body>
+</html>

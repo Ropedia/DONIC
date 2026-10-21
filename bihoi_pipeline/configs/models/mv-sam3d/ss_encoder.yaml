@@ -1,0 +1,10 @@
+_target_: sam3d_objects.model.backbone.tdfy_dit.models.sparse_structure_vae.SparseStructureEncoderTdfyWrapper
+return_raw: True
+in_channels: 1
+latent_channels: 8
+channels:
+- 32
+- 128
+- 512
+num_res_blocks: 2
+num_res_blocks_middle: 2

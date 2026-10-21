@@ -1,0 +1,59 @@
+{
+  "sam3d-objects": {
+    "python": "3.11.0",
+    "pip": "25.0.1",
+    "setuptools": "75.8.2",
+    "wheel": "0.45.1",
+    "c-compiler": "1.7.0",
+    "cxx-compiler": "1.7.0"
+  },
+  "handobj_webui": {
+    "python": "3.10.21",
+    "pip": "26.2.1",
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  },
+  "foundationpose": {
+    "python": "3.11.16",
+    "pip": "26.2.1",
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0",
+    "cmake": "4.4.3",
+    "ninja": "1.13.2",
+    "c-compiler": "1.10.0",
+    "cxx-compiler": "1.10.0",
+    "eigen": "5.0.1",
+    "boost-cpp": "1.85.0",
+    "pybind11": "3.1.0"
+  },
+  "easymocap": {
+    "python": "3.9.23",
+    "pip": "25.2",
+    "setuptools": "80.9.0",
+    "wheel": "0.45.1"
+  },
+  "sam3": {
+    "python": "3.12.14",
+    "pip": "26.2.1",
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  },
+  "hocap-annotation": {
+    "python": "3.10.21",
+    "pip": "26.2.1",
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  },
+  "depthanything3": {
+    "python": "3.11.16",
+    "pip": "26.2.1",
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  },
+  "wilor": {
+    "python": "3.10.21",
+    "pip": "26.2.1",
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0"
+  }
+}

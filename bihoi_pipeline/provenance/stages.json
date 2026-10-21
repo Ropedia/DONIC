@@ -1,0 +1,268 @@
+[
+  {
+    "key": "preprocess",
+    "name": "1 Prepare videos/images/calibration and masks",
+    "environments": [
+      "easymocap",
+      "handobj_webui",
+      "sam3"
+    ],
+    "gpu": "CPU helpers; single GPU first-frame SAM3; multi-GPU SAM3/SAM2 video masks",
+    "entrypoints": [
+      "rename_videos_31cams.py",
+      "rename_videos_extract_frames_ffmpeg_pts_compat.py",
+      "prepare_bowl_0820_ck_ffmpeg_fast.py",
+      "webui/extract_reference_frames.py",
+      "webui/shortest_video_end.py",
+      "webui/equalize_camera_frames.py",
+      "webui/sync_calibration.py",
+      "webui/mask_views.py",
+      "sam3/sam3text_object.py",
+      "sam3/sam3text_multi_gpu.py"
+    ],
+    "inputs": [
+      "videos/takeXX/*.mp4",
+      "operator rig calibration",
+      "text prompt"
+    ],
+    "outputs": [
+      "videos/*.mp4",
+      "images1/*.jpg",
+      "images/<cam>/*.jpg",
+      "mask/*.png",
+      "masks/<cam>/*.png",
+      "camera files"
+    ],
+    "models": [
+      "sam3",
+      "sam2"
+    ],
+    "after": []
+  },
+  {
+    "key": "masks",
+    "name": "1b Re-run segmentation",
+    "environments": [
+      "sam3",
+      "handobj_webui"
+    ],
+    "gpu": "single and multi-GPU",
+    "entrypoints": [
+      "sam3/sam3text_object.py",
+      "sam3/sam3text_multi_gpu.py",
+      "webui/mask_views.py",
+      "webui/mask_views_all_cams.py"
+    ],
+    "inputs": [
+      "images1",
+      "images",
+      "text prompt",
+      "camera files"
+    ],
+    "outputs": [
+      "mask",
+      "masks"
+    ],
+    "models": [
+      "sam3",
+      "sam2"
+    ],
+    "after": [
+      "preprocess"
+    ]
+  },
+  {
+    "key": "recon",
+    "name": "2 Metric depth and object mesh",
+    "environments": [
+      "depthanything3",
+      "sam3d-objects",
+      "sam3",
+      "handobj_webui",
+      "easymocap"
+    ],
+    "gpu": "multi-GPU DA3, single GPU MV-SAM3D",
+    "entrypoints": [
+      "Depth-Anything-3/da3_multiview_metric_align_uint16_v4_8gpu.py",
+      "MV-SAM3D/run_mv_sam3d_metric_scale.py",
+      "MV-SAM3D/notebook/inference.py",
+      "MV-SAM3D/texture_export.py",
+      "webui/mask_views.py",
+      "webui/equalize_camera_frames.py",
+      "webui/sync_calibration.py",
+      "webui/link_shared_take_resources.py"
+    ],
+    "inputs": [
+      "images",
+      "masks",
+      "images1",
+      "mask",
+      "camera files"
+    ],
+    "outputs": [
+      "depth/<cam>/*.png",
+      "depth debug/backup folders",
+      "meshes/compressed.ply",
+      "meshes/metric_scale_info.json",
+      "optional meshes/textured.glb and sidecar"
+    ],
+    "models": [
+      "da3",
+      "mv-sam3d",
+      "moge"
+    ],
+    "after": [
+      "preprocess"
+    ],
+    "secondary_take": "DA3 per take, then link take01 mesh; waits for primary reconstruction"
+  },
+  {
+    "key": "meshscale",
+    "name": "2b Silhouette metric mesh rescaling",
+    "environments": [
+      "easymocap"
+    ],
+    "gpu": "CPU",
+    "entrypoints": [
+      "webui/mesh_scale_from_silhouettes.py"
+    ],
+    "inputs": [
+      "meshes/compressed.ply",
+      "mask",
+      "camera files"
+    ],
+    "outputs": [
+      "rescaled meshes/compressed.ply",
+      "scale diagnostics"
+    ],
+    "models": [],
+    "after": [
+      "recon"
+    ],
+    "secondary_take": "Skipped because mesh is shared"
+  },
+  {
+    "key": "tracking",
+    "name": "3 FoundationPose / WAPR tracking and geometry postoptimization",
+    "environments": [
+      "foundationpose",
+      "easymocap",
+      "wapr"
+    ],
+    "gpu": "single GPU; CPU camera-K and encoding helpers",
+    "entrypoints": [
+      "run_resize_camk_foundationpose_args_local.sh",
+      "generate_cam_k.py",
+      "FoundationPose/run_demo_d_working_depth_optional_no_force_bbox_center_fixed_fastio.py",
+      "FoundationPose/postopt_geometry_global_pose.py",
+      "FoundationPose/render_allcams_mesh_grid_fast_green.py",
+      "webui/wapr_tracking.py",
+      "webui/foundationpose_reinit.py",
+      "webui/tracking_preview.py",
+      "webui/tracking_run.py"
+    ],
+    "inputs": [
+      "images",
+      "masks",
+      "depth mm",
+      "mesh",
+      "camera files"
+    ],
+    "outputs": [
+      "cam_K.txt",
+      "debug_depth/ob_in_cam",
+      "debug_depth/geometry_global_opt/ob_in_world",
+      "tracking grid/video"
+    ],
+    "models": [
+      "foundationpose",
+      "wapr",
+      "sapr",
+      "wbps"
+    ],
+    "after": [
+      "recon"
+    ]
+  },
+  {
+    "key": "hands",
+    "name": "4 WiLoR detection, multiview triangulation and MANO",
+    "environments": [
+      "wilor",
+      "easymocap"
+    ],
+    "gpu": "scheduler-assigned single GPU; wrapper dispatches fitting jobs within that assignment",
+    "entrypoints": [
+      "run_extract_sapiens_easymocap_10fps_kalman.sh",
+      "WiLoR/demo_fast.py [external licensed variant]",
+      "apps/demo/mv1p_fast.py"
+    ],
+    "inputs": [
+      "images",
+      "camera files",
+      "person prior/calib/restored_flat_real_scale.pt",
+      "licensed MANO/WiLoR assets"
+    ],
+    "outputs": [
+      "annots_fallback/<cam>/*.json",
+      "output/manol/smpl/*.json",
+      "output/manor/smpl/*.json",
+      "triangulation and Kalman state/diagnostics"
+    ],
+    "models": [
+      "wilor",
+      "mano"
+    ],
+    "after": [
+      "tracking"
+    ],
+    "fps": 10
+  },
+  {
+    "key": "final",
+    "name": "5 Exact HO-Cap joint refinement, exports and grids",
+    "environments": [
+      "hocap-annotation",
+      "easymocap"
+    ],
+    "gpu": "multi-GPU solver/rendering; CPU export and FFmpeg",
+    "entrypoints": [
+      "run_joint_pose_solver_only_and_export_bimanual_10fps_8gpu_hocap_meshsdf_31cam.sh",
+      "FoundationPose/render_object_both_hands_joint_pose_solver_only_10fps_8gpu_hocap_meshsdf_31cam.py",
+      "FoundationPose/export_outputmano_to_do_as_i_do_raw_bimanual_8gpu.py",
+      "FoundationPose/export_outputmano_to_do_as_i_do_raw_bimanual.py",
+      "FoundationPose/export_standardized_mano_object_table_4rings_first500.py",
+      "run_render_outputmano_grid_8gpu.sh",
+      "FoundationPose/render_object_both_hands_joint_pose_solver_only_10fps_8gpu_hocap_meshsdf_31cam_fastgrid.py"
+    ],
+    "inputs": [
+      "depth",
+      "masks",
+      "images",
+      "camera files",
+      "meshes/compressed.ply",
+      "debug_depth/geometry_global_opt/ob_in_world",
+      "output/manol and/or manor",
+      "MANO assets"
+    ],
+    "outputs": [
+      "outputmano/contact_mano",
+      "outputmano/smoothed_ob_in_world",
+      "outputmano/object_mesh_scaled.ply",
+      "Do-As-I-Do raw export",
+      "standardized_hoi_30fps",
+      "outputmano/grid/final_hand_object_interaction.mp4"
+    ],
+    "models": [
+      "mano"
+    ],
+    "after": [
+      "hands",
+      "tracking",
+      "recon"
+    ],
+    "fps": 10,
+    "export_fps": 30,
+    "export_frame_limit": 500
+  }
+]

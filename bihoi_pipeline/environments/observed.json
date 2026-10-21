@@ -1,0 +1,789 @@
+{
+  "handobj_webui": {
+    "python": "3.10.21",
+    "torch": null,
+    "torchvision": null,
+    "packages": {
+      "gradio": {
+        "version": "6.29.1"
+      },
+      "numpy": {
+        "version": "2.2.6"
+      },
+      "pillow": {
+        "version": "12.3.0"
+      },
+      "trimesh": {
+        "version": "4.12.2",
+        "proposed_from": "easymocap"
+      }
+    },
+    "unobserved_packages": []
+  },
+  "easymocap": {
+    "python": "3.9.23",
+    "torch": {
+      "version": "2.3.1+cu121"
+    },
+    "torchvision": {
+      "version": "0.18.1+cu121"
+    },
+    "packages": {
+      "numpy": {
+        "version": "1.26.4"
+      },
+      "scipy": {
+        "version": "1.13.1"
+      },
+      "opencv-python": {
+        "version": "4.8.1.78"
+      },
+      "pillow": {
+        "version": "11.3.0"
+      },
+      "tqdm": {
+        "version": "4.70.0"
+      },
+      "pyyaml": {
+        "version": "6.0.3"
+      },
+      "yacs": {
+        "version": "0.1.8"
+      },
+      "tabulate": {
+        "version": "0.9.0"
+      },
+      "termcolor": {
+        "version": "3.1.0"
+      },
+      "ipdb": {
+        "version": "0.13.13"
+      },
+      "func-timeout": {
+        "version": "4.3.5"
+      },
+      "matplotlib": {
+        "version": "3.9.4"
+      },
+      "trimesh": {
+        "version": "4.12.2"
+      },
+      "smplx": {
+        "version": "0.1.28"
+      },
+      "chumpy": {
+        "version": "0.71",
+        "vcs": {
+          "url": "https://github.com/mattloper/chumpy.git",
+          "vcs_info": {
+            "commit_id": "580566eafc9ac68b2614b64d6f7aaa84eebb70da",
+            "vcs": "git"
+          }
+        }
+      },
+      "joblib": {
+        "version": "1.5.3"
+      },
+      "pyrender": {
+        "version": "0.1.45"
+      },
+      "pyopengl": {
+        "version": "3.1.0"
+      },
+      "scikit-image": {
+        "version": "0.24.0"
+      }
+    },
+    "unobserved_packages": []
+  },
+  "sam3": {
+    "python": "3.12.14",
+    "torch": {
+      "version": "2.10.0+cu128"
+    },
+    "torchvision": {
+      "version": "0.25.0+cu128"
+    },
+    "packages": {
+      "numpy": {
+        "version": "1.26.4"
+      },
+      "scipy": {
+        "version": "1.17.1"
+      },
+      "pillow": {
+        "version": "12.3.0"
+      },
+      "tqdm": {
+        "version": "4.70.0"
+      },
+      "timm": {
+        "version": "1.0.28"
+      },
+      "ftfy": {
+        "version": "6.1.1"
+      },
+      "regex": {
+        "version": "2026.7.19"
+      },
+      "iopath": {
+        "version": "0.1.10"
+      },
+      "typing-extensions": {
+        "version": "4.16.0"
+      },
+      "huggingface-hub": {
+        "version": "1.28.0"
+      },
+      "einops": {
+        "version": "0.8.2"
+      },
+      "opencv-python": {
+        "version": "4.11.0.86"
+      },
+      "pycocotools": {
+        "version": "2.0.11"
+      },
+      "hydra-core": {
+        "version": "1.3.7"
+      },
+      "omegaconf": {
+        "version": "2.3.1"
+      },
+      "psutil": {
+        "version": "7.2.2"
+      },
+      "matplotlib": {
+        "version": "3.11.1"
+      },
+      "safetensors": {
+        "version": "0.8.0"
+      },
+      "decord": {
+        "version": "0.6.0"
+      }
+    },
+    "unobserved_packages": [
+      "numba",
+      "pandas",
+      "tensordict",
+      "torchmetrics"
+    ]
+  },
+  "depthanything3": {
+    "python": "3.11.16",
+    "torch": {
+      "version": "2.10.0+cu128"
+    },
+    "torchvision": {
+      "version": "0.25.0+cu128"
+    },
+    "packages": {
+      "numpy": {
+        "version": "1.26.4"
+      },
+      "scipy": {
+        "version": "1.17.1"
+      },
+      "pillow": {
+        "version": "12.3.0"
+      },
+      "tqdm": {
+        "version": "4.70.0"
+      },
+      "einops": {
+        "version": "0.8.2"
+      },
+      "omegaconf": {
+        "version": "2.3.1"
+      },
+      "huggingface-hub": {
+        "version": "1.30.0"
+      },
+      "opencv-python": {
+        "version": "4.11.0.86"
+      },
+      "addict": {
+        "version": "2.4.0"
+      },
+      "safetensors": {
+        "version": "0.8.0"
+      },
+      "trimesh": {
+        "version": "5.1.0"
+      },
+      "evo": {
+        "version": "1.37.1"
+      },
+      "matplotlib": {
+        "version": "3.11.1"
+      },
+      "imageio": {
+        "version": "2.37.4"
+      },
+      "imageio-ffmpeg": {
+        "version": "0.6.0"
+      },
+      "plyfile": {
+        "version": "1.1.3"
+      },
+      "e3nn": {
+        "version": "0.6.0"
+      },
+      "open3d": {
+        "version": "0.19.0"
+      },
+      "fastapi": {
+        "version": "0.141.1"
+      },
+      "pydantic": {
+        "version": "2.13.5"
+      },
+      "typer": {
+        "version": "0.27.2"
+      },
+      "uvicorn": {
+        "version": "0.52.4"
+      },
+      "gradio": {
+        "version": "6.26.0"
+      },
+      "moviepy": {
+        "version": "1.0.3"
+      },
+      "pillow-heif": {
+        "version": "1.7.0"
+      },
+      "pycolmap": {
+        "version": "4.2.0"
+      }
+    },
+    "unobserved_packages": []
+  },
+  "sam3d-objects": {
+    "python": "3.11.0",
+    "torch": {
+      "version": "2.5.1+cu121"
+    },
+    "torchvision": {
+      "version": "0.20.1+cu121"
+    },
+    "packages": {
+      "numpy": {
+        "version": "1.26.4"
+      },
+      "scipy": {
+        "version": "1.17.1"
+      },
+      "pillow": {
+        "version": "11.3.0"
+      },
+      "tqdm": {
+        "version": "4.70.0"
+      },
+      "einops": {
+        "version": "0.8.2"
+      },
+      "timm": {
+        "version": "0.9.16"
+      },
+      "hydra-core": {
+        "version": "1.3.2"
+      },
+      "omegaconf": {
+        "version": "2.3.0"
+      },
+      "loguru": {
+        "version": "0.7.2"
+      },
+      "utils3d": {
+        "version": "0.0.2",
+        "vcs": {
+          "url": "https://github.com/EasternJournalist/utils3d.git",
+          "vcs_info": {
+            "commit_id": "3913c65d81e05e47b9f367250cf8c0f7462a0900",
+            "requested_revision": "3913c65d81e05e47b9f367250cf8c0f7462a0900",
+            "vcs": "git"
+          }
+        }
+      },
+      "safetensors": {
+        "version": "0.8.0"
+      },
+      "matplotlib": {
+        "version": "3.11.1"
+      },
+      "seaborn": {
+        "version": "0.13.2"
+      },
+      "gradio": {
+        "version": "5.49.0"
+      },
+      "open3d": {
+        "version": "0.18.0"
+      },
+      "opencv-python": {
+        "version": "4.9.0.80"
+      },
+      "trimesh": {
+        "version": "5.1.0"
+      },
+      "pymeshfix": {
+        "version": "0.17.0"
+      },
+      "xatlas": {
+        "version": "0.0.9"
+      },
+      "spconv-cu121": {
+        "version": "2.3.8"
+      },
+      "xformers": {
+        "version": "0.0.28.post3"
+      },
+      "flash-attn": {
+        "version": "2.8.3"
+      },
+      "pytorch3d": {
+        "version": "0.7.8",
+        "vcs": {
+          "url": "https://github.com/facebookresearch/pytorch3d.git",
+          "vcs_info": {
+            "commit_id": "75ebeeaea0908c5527e7b1e305fbc7681382db47",
+            "requested_revision": "75ebeeaea0908c5527e7b1e305fbc7681382db47",
+            "vcs": "git"
+          }
+        }
+      },
+      "kaolin": {
+        "version": "0.17.0"
+      },
+      "nvdiffrast": {
+        "version": "0.4.0",
+        "vcs": {
+          "url": "https://github.com/NVlabs/nvdiffrast.git",
+          "vcs_info": {
+            "commit_id": "253ac4fcea7de5f396371124af597e6cc957bfae",
+            "vcs": "git"
+          }
+        }
+      },
+      "gsplat": {
+        "version": "1.5.2",
+        "vcs": {
+          "url": "https://github.com/nerfstudio-project/gsplat.git",
+          "vcs_info": {
+            "commit_id": "0b4dddf04cb687367602c01196913cde6a743d70",
+            "requested_revision": "0b4dddf04cb687367602c01196913cde6a743d70",
+            "vcs": "git"
+          }
+        }
+      },
+      "moge": {
+        "version": "1.0.0",
+        "vcs": {
+          "url": "https://github.com/microsoft/MoGe.git",
+          "vcs_info": {
+            "commit_id": "a8c37341bc0325ca99b9d57981cc3bb2bd3e255b",
+            "requested_revision": "a8c37341bc0325ca99b9d57981cc3bb2bd3e255b",
+            "vcs": "git"
+          }
+        }
+      },
+      "easydict": {
+        "version": "1.13"
+      },
+      "astor": {
+        "version": "0.8.1"
+      },
+      "optree": {
+        "version": "0.14.1"
+      },
+      "igraph": {
+        "version": "0.11.8"
+      },
+      "plyfile": {
+        "version": "1.1.3"
+      },
+      "plotly": {
+        "version": "7.0.0"
+      },
+      "imageio": {
+        "version": "2.37.4"
+      },
+      "lightning": {
+        "version": "2.3.3"
+      },
+      "huggingface-hub": {
+        "version": "0.36.2"
+      },
+      "decord": {
+        "version": "0.6.0"
+      },
+      "pyvista": {
+        "version": "0.49.0"
+      },
+      "pyrender": {
+        "version": "0.1.45"
+      },
+      "pyopengl": {
+        "version": "3.1.0"
+      },
+      "networkx": {
+        "version": "3.6.1"
+      },
+      "iopath": {
+        "version": "0.1.10"
+      },
+      "fvcore": {
+        "version": "0.1.5.post20221221"
+      },
+      "ipycanvas": {
+        "version": "0.14.3"
+      },
+      "ipyevents": {
+        "version": "2.0.4"
+      },
+      "jupyter-client": {
+        "version": "7.4.9"
+      },
+      "flask": {
+        "version": "3.0.3"
+      },
+      "tornado": {
+        "version": "6.5.8"
+      },
+      "comm": {
+        "version": "0.2.3"
+      },
+      "usd-core": {
+        "version": "26.8"
+      },
+      "pybind11": {
+        "version": "3.1.0"
+      },
+      "pygltflib": {
+        "version": "1.16.5"
+      },
+      "warp-lang": {
+        "version": "1.17.0"
+      },
+      "ipython": {
+        "version": "9.17.1"
+      },
+      "jaxtyping": {
+        "version": "0.3.11"
+      },
+      "rich": {
+        "version": "14.3.4"
+      },
+      "moderngl": {
+        "version": "5.12.0"
+      },
+      "ninja": {
+        "version": "1.13.2"
+      }
+    },
+    "unobserved_packages": [
+      "fast-simplification"
+    ]
+  },
+  "foundationpose": {
+    "python": "3.11.16",
+    "torch": {
+      "version": "2.6.0+cu124"
+    },
+    "torchvision": {
+      "version": "0.21.0+cu124"
+    },
+    "packages": {
+      "numpy": {
+        "version": "1.26.4"
+      },
+      "scipy": {
+        "version": "1.12.0"
+      },
+      "pillow": {
+        "version": "12.3.0"
+      },
+      "opencv-python": {
+        "version": "4.9.0.80"
+      },
+      "trimesh": {
+        "version": "4.2.2"
+      },
+      "matplotlib": {
+        "version": "3.11.1"
+      },
+      "open3d": {
+        "version": "0.18.0"
+      },
+      "pyyaml": {
+        "version": "6.0.1"
+      },
+      "kornia": {
+        "version": "0.7.2"
+      },
+      "h5py": {
+        "version": "3.10.0"
+      },
+      "imageio": {
+        "version": "2.34.0"
+      },
+      "pandas": {
+        "version": "3.0.5"
+      },
+      "joblib": {
+        "version": "1.3.2"
+      },
+      "psutil": {
+        "version": "7.2.2"
+      },
+      "omegaconf": {
+        "version": "2.3.0"
+      },
+      "tqdm": {
+        "version": "4.70.0"
+      },
+      "transformations": {
+        "version": "2024.6.1"
+      },
+      "nvdiffrast": {
+        "version": "0.4.0",
+        "vcs": {
+          "url": "https://github.com/NVlabs/nvdiffrast.git",
+          "vcs_info": {
+            "commit_id": "253ac4fcea7de5f396371124af597e6cc957bfae",
+            "vcs": "git"
+          }
+        }
+      },
+      "pytorch3d": {
+        "version": "0.7.9",
+        "vcs": {
+          "url": "https://github.com/facebookresearch/pytorch3d.git",
+          "vcs_info": {
+            "commit_id": "e73a7e7bfc580d1f9225ad9ff7d2c753c320aabd",
+            "vcs": "git"
+          }
+        }
+      },
+      "warp-lang": {
+        "version": "1.0.2"
+      },
+      "einops": {
+        "version": "0.7.0"
+      },
+      "ruamel-yaml": {
+        "version": "0.18.6"
+      },
+      "pyrender": {
+        "version": "0.1.45"
+      },
+      "pyopengl": {
+        "version": "3.1.0"
+      },
+      "scikit-learn": {
+        "version": "1.4.1.post1"
+      },
+      "iopath": {
+        "version": "0.1.10"
+      },
+      "fvcore": {
+        "version": "0.1.5.post20221221"
+      },
+      "pybind11": {
+        "version": "2.12.0"
+      }
+    },
+    "unobserved_packages": [
+      "imageio-ffmpeg"
+    ]
+  },
+  "wilor": {
+    "python": "3.10.21",
+    "torch": {
+      "version": "2.6.0+cu126"
+    },
+    "torchvision": {
+      "version": "0.21.0+cu126"
+    },
+    "packages": {
+      "numpy": {
+        "version": "2.2.6"
+      },
+      "scipy": {
+        "version": "1.15.3"
+      },
+      "pillow": {
+        "version": "12.3.0"
+      },
+      "opencv-python": {
+        "version": "5.0.0.93"
+      },
+      "pyrender": {
+        "version": "0.1.45"
+      },
+      "pytorch-lightning": {
+        "version": "2.6.5"
+      },
+      "scikit-image": {
+        "version": "0.25.2"
+      },
+      "smplx": {
+        "version": "0.1.28"
+      },
+      "yacs": {
+        "version": "0.1.8"
+      },
+      "chumpy": {
+        "version": "0.71",
+        "vcs": {
+          "url": "https://github.com/mattloper/chumpy.git",
+          "vcs_info": {
+            "commit_id": "580566eafc9ac68b2614b64d6f7aaa84eebb70da",
+            "vcs": "git"
+          }
+        }
+      },
+      "timm": {
+        "version": "1.0.28"
+      },
+      "einops": {
+        "version": "0.8.2"
+      },
+      "pandas": {
+        "version": "2.3.3"
+      },
+      "hydra-core": {
+        "version": "1.3.5"
+      },
+      "hydra-submitit-launcher": {
+        "version": "1.2.0"
+      },
+      "hydra-colorlog": {
+        "version": "1.2.0"
+      },
+      "pyrootutils": {
+        "version": "1.0.4"
+      },
+      "rich": {
+        "version": "15.0.0"
+      },
+      "webdataset": {
+        "version": "1.0.2"
+      },
+      "ultralytics": {
+        "version": "8.1.34"
+      },
+      "trimesh": {
+        "version": "5.0.0"
+      }
+    },
+    "unobserved_packages": [
+      "wandb"
+    ]
+  },
+  "hocap-annotation": {
+    "python": "3.10.21",
+    "torch": {
+      "version": "2.5.1+cu118"
+    },
+    "torchvision": {
+      "version": "0.20.1+cu118"
+    },
+    "packages": {
+      "numpy": {
+        "version": "1.26.4"
+      },
+      "scipy": {
+        "version": "1.15.3"
+      },
+      "pillow": {
+        "version": "12.3.0"
+      },
+      "opencv-python": {
+        "version": "4.11.0.86"
+      },
+      "pyrender": {
+        "version": "0.1.45"
+      },
+      "pyopengl": {
+        "version": "3.1.0"
+      },
+      "trimesh": {
+        "version": "5.1.0"
+      },
+      "smplx": {
+        "version": "0.1.28"
+      },
+      "imageio": {
+        "version": "2.37.4"
+      },
+      "matplotlib": {
+        "version": "3.10.9"
+      },
+      "tqdm": {
+        "version": "4.70.1"
+      },
+      "pyyaml": {
+        "version": "6.0.3"
+      },
+      "chumpy": {
+        "version": "0.71",
+        "vcs": {
+          "url": "https://github.com/mattloper/chumpy.git",
+          "vcs_info": {
+            "commit_id": "580566eafc9ac68b2614b64d6f7aaa84eebb70da",
+            "vcs": "git"
+          }
+        }
+      }
+    },
+    "unobserved_packages": []
+  },
+  "wapr": {
+    "python": "3.11.16",
+    "torch": {
+      "version": "2.10.0+cu128"
+    },
+    "torchvision": {
+      "version": "0.25.0+cu128"
+    },
+    "packages": {
+      "numpy": {
+        "version": "1.26.4"
+      },
+      "scipy": {
+        "version": "1.17.1"
+      },
+      "opencv-python": {
+        "version": "4.11.0.86"
+      },
+      "trimesh": {
+        "version": "5.1.0"
+      },
+      "pybind11": {
+        "version": "3.1.0"
+      },
+      "kornia": {
+        "version": "0.8.3"
+      },
+      "pillow": {
+        "version": "12.3.0"
+      },
+      "onnx": {
+        "version": "1.17.0"
+      },
+      "huggingface-hub": {
+        "version": "0.36.2"
+      },
+      "nvdiffrast": {
+        "version": "0.4.0"
+      },
+      "threadpoolctl": {
+        "version": "3.6.0"
+      }
+    },
+    "unobserved_packages": []
+  }
+}

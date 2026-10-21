@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.21
+  - pip=26.2.1
+  - setuptools=84.0.0
+  - wheel=0.48.0
+  - cmake
+  - ninja
+  - c-compiler
+  - cxx-compiler

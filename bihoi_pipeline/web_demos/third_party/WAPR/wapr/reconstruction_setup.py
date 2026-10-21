@@ -1,0 +1,388 @@
+# Author: Yulin Wang (yulinwang@seu.edu.cn)
+# SPDX-License-Identifier: LGPL-2.1-only
+"""Prepare SAM3D inference without its training environment.
+
+只准备 SAM3D 推理，不安装上游训练环境；模型默认从魔搭下载。
+"""
+import hashlib
+import importlib
+import os
+import re
+import subprocess
+import sys
+import urllib.parse
+import urllib.request
+from pathlib import Path
+
+
+# Fixed ModelScope file revisions and hashes; model terms remain in LICENSE.
+# 固定魔搭文件版本与摘要；模型条款保存在 LICENSE。
+_SAM3D_ARTIFACTS = (
+    ('LICENSE', '64ec50f24a12eb631aceff750993d162d751dc25', 8204, 'b3a5a0e2d973ab80e6610ccf1cffc40756050d0ace3cd4fec879b3ec290b2e9b'),
+    ('checkpoints/pipeline.yaml', '64ec50f24a12eb631aceff750993d162d751dc25', 3548, '53c3d226b21df85c0bb3d16e6e4fa63abde0d6167525765eb929d02bfa9d358c'),
+    ('checkpoints/slat_decoder_gs.ckpt', '64ec50f24a12eb631aceff750993d162d751dc25', 171476155, 'f8077c36a06eaf890dd93cda1937411f793dea1eb80b3dd9329f2038ba84a111'),
+    ('checkpoints/slat_decoder_gs.yaml', '64ec50f24a12eb631aceff750993d162d751dc25', 576, '53f054e02a0c185f0a6885d30bb6ca0ec92efe0a98148688e7f05f7c26afe670'),
+    ('checkpoints/slat_decoder_gs_4.ckpt', '64ec50f24a12eb631aceff750993d162d751dc25', 170269801, '731a0eceaa47945b52aa27f650d695b2aea9cc70945751e5609e5cb5b49f0186'),
+    ('checkpoints/slat_decoder_gs_4.yaml', '64ec50f24a12eb631aceff750993d162d751dc25', 575, '3d1dfd4c56cdac56f30e0cf5eb310d4df973fe25c60ac0a462c86ca4e3bf8b48'),
+    ('checkpoints/slat_decoder_mesh.ckpt', '64ec50f24a12eb631aceff750993d162d751dc25', 363726862, '85907b37b67d8ce5b099a96629bdcfbd873eb407dee6b3aa9a75deb15038db33'),
+    ('checkpoints/slat_decoder_mesh.yaml', '64ec50f24a12eb631aceff750993d162d751dc25', 300, '8f46952764aa985c50109a56f0b4f07625cdb06457aaded74957d26f3520c69e'),
+    ('checkpoints/slat_encoder.ckpt', 'b7f2543810586d96ce6185e549f4d695e51560a8', 173263986, '6485623145535f42c8afa4cbb68ab9953e54e2f0c1cb1eaf95dcb41051e10181'),
+    ('checkpoints/slat_encoder.yaml', 'b7f2543810586d96ce6185e549f4d695e51560a8', 268, 'ca80da7f1395a2acef9c6cea30ec3ccc89321ef890c644860f316a4ef1e8ebdb'),
+    ('checkpoints/slat_generator.ckpt', '64ec50f24a12eb631aceff750993d162d751dc25', 4906537684, '91529bde8e7daa12d09618a66c319e3a5a6398db6b23b958cedcb1c3f28faabb'),
+    ('checkpoints/slat_generator.yaml', '64ec50f24a12eb631aceff750993d162d751dc25', 1986, '53029fadff6fe34a0344381a16d64d65d0567d603484952712e8969319559c4e'),
+    ('checkpoints/ss_decoder.ckpt', '64ec50f24a12eb631aceff750993d162d751dc25', 147609242, '6dac1cd7b7fda5a38e0614fadae441f1794f80e39ea2981f1ac8aff0a7e99340'),
+    ('checkpoints/ss_decoder.yaml', '64ec50f24a12eb631aceff750993d162d751dc25', 244, 'baacff269b664f84f7aa1896ebd66128065f6568cdb88d419d5c3d2ccb4193ae'),
+    ('checkpoints/ss_encoder.ckpt', 'b7f2543810586d96ce6185e549f4d695e51560a8', 119085402, 'dcc47810ac568b11fe6e4821ea1c8d6b960dfbda3e5f68e94c19f44b3bf9e83b'),
+    ('checkpoints/ss_encoder.yaml', 'b7f2543810586d96ce6185e549f4d695e51560a8', 231, 'd3df5e18b2cbe87697d319adce0fe7e4fb6266809ad9d2f8c502761739bc4a06'),
+    ('checkpoints/ss_generator.ckpt', '64ec50f24a12eb631aceff750993d162d751dc25', 6690136964, '225f40479e4cff4f39d6fa14c55be3abad1475bf55b61af3bec1e19ed2f6c146'),
+    ('checkpoints/ss_generator.yaml', '64ec50f24a12eb631aceff750993d162d751dc25', 5076, '3c265448bca7c057f94e3ef56adea3a895a10bcd9f15f992a41dd03fa35412cd'),
+)
+
+
+def _kaolin_requirement(torch):
+    """Select the official CUDA wheel for the actual interpreter and Torch pair.
+
+    按实际解释器、Torch 与 CUDA 组合选择 NVIDIA 官方 Kaolin wheel。
+    """
+    from importlib.metadata import PackageNotFoundError, version
+    try:
+        if version("kaolin") == "0.18.0":
+            return "kaolin==0.18.0"
+    except PackageNotFoundError:
+        pass
+    import urllib.parse
+    import urllib.request
+    from packaging.tags import sys_tags
+    from packaging.utils import parse_wheel_filename
+    torch_version = torch.__version__.split("+", 1)[0]
+    cuda_tag = "cu" + torch.version.cuda.replace(".", "")
+    index_url = "https://nvidia-kaolin.s3.us-east-2.amazonaws.com/torch-" + torch_version + "_" + cuda_tag + ".html"
+    page = None
+    for direct in (False, True):
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({})) if direct else urllib.request.build_opener()
+        try:
+            with opener.open(index_url, timeout=20) as response:
+                page = response.read().decode("utf-8")
+            break
+        except OSError:
+            continue
+    if page is None:
+        raise RuntimeError("Official Kaolin index unavailable for this Torch/CUDA pair / 当前 Torch/CUDA 组合的官方 Kaolin 索引不可用")
+    compatible_tags = set(sys_tags())
+    candidates = []
+    for href in re.findall(r'href=[\"\']([^\"\']+)[\"\']', page):
+        url = urllib.parse.urljoin(index_url, href)
+        filename = urllib.parse.unquote(urllib.parse.urlsplit(url).path.rsplit("/", 1)[-1])
+        if not filename.endswith(".whl"):
+            continue
+        name, wheel_version, _, tags = parse_wheel_filename(filename)
+        if str(name) == "kaolin" and str(wheel_version) == "0.18.0" and tags & compatible_tags:
+            candidates.append(url)
+    if len(candidates) != 1:
+        raise RuntimeError("Expected one matching official Kaolin wheel / 需要唯一匹配的官方 Kaolin wheel")
+    print("WAPR_KAOLIN_PAIR", {"torch": torch_version, "cuda": torch.version.cuda,
+                              "python": sys.version.split()[0], "kaolin": "0.18.0"}, flush=True)
+    return "kaolin @ " + candidates[0]
+
+
+def reconstruction_weights_status(checkpoint_directory=None):
+    """Check local files before authentication or network access.
+
+    先检查本地文件；此检查不读取 token，也不访问网络。
+    """
+    from wapr.resources import weights_dir
+    directory = Path(checkpoint_directory or os.path.join(weights_dir(), "sam3d", "checkpoints"))
+    pipeline = directory / "pipeline.yaml"
+    required = ["pipeline.yaml"]
+    if pipeline.is_file():
+        # Published pipeline path fields name adjacent checkpoints/configs.
+        # 已发布 pipeline 的 path 字段引用同目录的权重与配置。
+        for line in pipeline.read_text(encoding="utf-8").splitlines():
+            match = re.match(r"^[A-Za-z0-9_]+_path:\s*([^\s#]+)", line)
+            if match:
+                name = match.group(1).strip("\"'")
+                if Path(name).name != name:
+                    raise ValueError("Checkpoint path must stay in its directory / 权重路径必须在同目录: " + name)
+                required.append(name)
+    missing = []
+    for name in required:
+        path = directory / name
+        if not path.is_file() or path.stat().st_size == 0:
+            missing.append(name)
+        elif path.suffix in (".ckpt", ".pt"):
+            with path.open("rb") as stream:
+                if stream.read(40).startswith(b"version https://git-lfs"):
+                    missing.append(name)
+    moge = Path(weights_dir()) / "moge-vitl" / "model.pt"
+    if not moge.is_file() or moge.stat().st_size == 0:
+        missing.append("MoGe/model.pt")
+    return {"status": "ready" if not missing else "missing", "directory": str(directory),
+            "pipeline": str(pipeline), "moge": str(moge), "missing": missing}
+
+
+def ensure_reconstruction_weights(checkpoint_directory=None, check_only=False):
+    """Reuse local checkpoints or fetch the pinned ModelScope model files.
+
+    复用本地权重，缺失时从魔搭获取固定版本模型文件。
+    """
+    result = reconstruction_weights_status(checkpoint_directory)
+    if result["status"] == "ready":
+        return result
+    needs_sam3d = any(name != "MoGe/model.pt" for name in result["missing"])
+    base_url = "https://modelscope.cn/api/v1/models/facebook/sam-3d-objects/repo?"
+    if needs_sam3d:
+        pipeline = next(row for row in _SAM3D_ARTIFACTS if row[0] == "checkpoints/pipeline.yaml")
+        url = base_url + urllib.parse.urlencode({"Revision": pipeline[1], "FilePath": pipeline[0]})
+        try:
+            # Check a small configuration before preparing the native environment.
+            # 在准备原生环境前检查小配置文件，不读取或发送 Hugging Face 凭据。
+            with urllib.request.urlopen(url, timeout=30) as response:
+                content = response.read(pipeline[2] + 1)
+            if len(content) != pipeline[2] or hashlib.sha256(content).hexdigest() != pipeline[3]:
+                raise ValueError("ModelScope configuration checksum mismatch")
+        except (OSError, ValueError) as error:
+            result.update(status="blocked", reason="SAM3D ModelScope download is unavailable; check network access and retry"
+                          " / SAM3D 魔搭下载暂不可用，请检查网络后重试: " + type(error).__name__)
+            return result
+    if check_only:
+        result["status"] = "download_required"
+        return result
+    if needs_sam3d:
+        from wapr.det2d import _download_file
+        directory = Path(result["directory"])
+        for relative, revision, size, fingerprint in _SAM3D_ARTIFACTS:
+            target = directory.parent / "LICENSE" if relative == "LICENSE" else directory / Path(relative).name
+            if target.is_file() and target.stat().st_size > 0:
+                with target.open("rb") as stream:
+                    if not stream.read(40).startswith(b"version https://git-lfs"):
+                        continue
+            url = base_url + urllib.parse.urlencode({"Revision": revision, "FilePath": relative})
+            temporary = str(target) + ".download"
+            _download_file(url, temporary)
+            digest = hashlib.sha256()
+            with open(temporary, "rb") as stream:
+                for block in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+                    digest.update(block)
+            if os.path.getsize(temporary) != size or digest.hexdigest() != fingerprint:
+                raise RuntimeError("SAM3D ModelScope file verification failed / SAM3D 魔搭文件校验失败: " + relative)
+            # Only complete, verified files become visible to the reconstruction loader.
+            # 只有完整且校验通过的文件才交给重建加载器。
+            os.replace(temporary, target)
+    if "MoGe/model.pt" in result["missing"]:
+        from huggingface_hub import hf_hub_download
+        hf_hub_download("Ruicheng/moge-vitl", "model.pt", endpoint="https://huggingface.co", token=False,
+                        local_dir=str(Path(result["moge"]).parent))
+    return reconstruction_weights_status(checkpoint_directory)
+
+
+def prepare_reconstruction(allow_replacement=None, check_only=False, checkpoint_directory=None):
+    """Build native inference dependencies against the existing Torch.
+
+    按已有 Torch 构建原生推理依赖；不更换 Torch，不安装完整训练清单。
+    """
+    from wapr.sam3d_isolated import SAM3D_ENV_ROOT, prepare_reconstruction_environment
+    if os.path.realpath(sys.prefix) != os.path.realpath(SAM3D_ENV_ROOT):
+        return prepare_reconstruction_environment(allow_replacement=allow_replacement,
+                                                   check_only=check_only, checkpoint_directory=checkpoint_directory)
+    if sys.platform != "linux":
+        return {"status": "blocked", "reason": "SAM3D native path requires Linux / SAM3D 原生路径需要 Linux"}
+    if sys.version_info[:2] < (3, 9):
+        return {"status": "blocked", "reason": "The selected MoGe source declares Python >=3.9 / 所选 MoGe 源码声明 Python >=3.9"}
+    if sys.version_info[:2] >= (3, 12):
+        return {"status": "blocked", "reason": "SAM3D's Open3D 0.18.0 recipe has no Python 3.12+ wheel; use a separately prepared compatible interpreter / SAM3D 的 Open3D 0.18.0 方案没有 Python 3.12+ wheel；请准备兼容的独立解释器"}
+    if not check_only:
+        # Unavailable model downloads must stop before native downloads and compilation.
+        # 模型下载不可用时，在原生依赖下载和编译之前停止。
+        access = ensure_reconstruction_weights(checkpoint_directory, check_only=True)
+        if access["status"] == "blocked":
+            return access
+    import torch
+    if not torch.cuda.is_available():
+        return {"status": "blocked", "reason": "Existing Torch needs CUDA / 已有 Torch 需要可用 CUDA"}
+    from torch.utils import _pytree
+    if not callable(getattr(_pytree, "tree_map_only", None)) or not callable(getattr(torch.nn.functional, "scaled_dot_product_attention", None)):
+        return {"status": "blocked", "reason": "Existing Torch lacks SAM3D pytree/SDPA APIs; Torch is retained / 已有 Torch 缺少 SAM3D pytree/SDPA API；保留 Torch"}
+    memory_gb = torch.cuda.get_device_properties(0).total_memory / 1024 ** 3
+    result = {"status": "native_build_required", "gpu_memory_gb": memory_gb,
+              "note": "Official setup recommends 32GB; smaller GPUs require actual inference validation / 官方建议 32GB；较小显存需实际推理验证"}
+    from wapr.installation import install_requirements
+    from wapr.resources import resource_root
+    from wapr.source_setup import SAM3D_REVISION, _checkout, prepare_source
+    # Only imports reached by the mesh/vertex-color inference path are prepared.
+    # 只准备网格/顶点颜色推理路径实际使用的依赖，不安装音频、训练和 UI 工具。
+    # Preserve the upstream Open3D recipe; do not silently install a different ABI.
+    # 保持上游 Open3D 方案，不静默安装不同 ABI；cp312 没有该版本 wheel。
+    # The pinned upstream inference code still imports pkg_resources.
+    # 固定的上游推理源码仍导入 pkg_resources；独立前缀保留提供它的 setuptools。
+    requirements = ["torchvision", "omegaconf", "hydra-core", "iopath", "xatlas", "open3d==0.18.0",
+                    "loguru", "tqdm", "safetensors", "optree", "astor", "easydict", "scipy",
+                    "pyvista", "pymeshfix", "igraph", "lightning==2.3.3", "einops", "timm",
+                    "setuptools<81", "wheel", "ninja", "opencv-python-headless", "plyfile",
+                    "fast-simplification>=0.2,<1", "numpy>=1.26.4,<2", "scipy<1.18",
+                    "opencv-python-headless<4.12",
+                    "gsplat"]
+    from importlib.metadata import version
+    requirements.extend(["torch==" + torch.__version__, "torchvision==" + version("torchvision")])
+    # Local inspection must not query a wheel index for a missing package.
+    # 本地检查缺失依赖时不查询联网 wheel 索引。
+    requirements.append("kaolin==0.18.0" if check_only else _kaolin_requirement(torch))
+    # Sparse kernels do not link the Torch extension ABI. The CUDA 11/12 runtime
+    # families are candidates, not a claim that all compiler/GPU pairs work.
+    # 稀疏内核不链接 Torch 扩展 ABI；CUDA 11/12 发行是待实测候选，不承诺所有组合可用。
+    cuda_major = int(torch.version.cuda.split(".")[0])
+    if cuda_major == 11:
+        requirements.append("spconv-cu118")
+    elif cuda_major == 12:
+        # cu120 wheels stop before CPython 3.12; cu124 publishes cp312 wheels.
+        # cu120 未提供 CPython 3.12 wheel；cu124 有 cp312 发行，仍需实测内核。
+        cuda_minor = int(torch.version.cuda.split(".")[1])
+        requirements.append("spconv-cu124" if cuda_minor >= 4 else "spconv-cu120")
+    else:
+        result.update(status="blocked", reason="No verified spconv candidate for this CUDA family / 此 CUDA 家族暂无已核验 spconv 候选")
+        return result
+    if cuda_major == 11 or (cuda_major == 12 and cuda_minor < 4):
+        # The older cumm wheels crash in tensorview.from_numpy with NumPy 2;
+        # the CUDA 12.1 CPU/CUDA probes pass with NumPy 1.26.4.
+        # 较旧 cumm wheel 在 NumPy 2 的 from_numpy 原生边界崩溃；
+        # CUDA 12.1 的 CPU/CUDA 实测在 NumPy 1.26.4 下通过。
+        # Keep SciPy and the single cv2 provider compatible with that NumPy ABI.
+        # SciPy 与唯一的 cv2 发行也须兼容该 NumPy ABI；更换仍进入确认计划。
+        requirements.extend(["numpy>=1.26.4,<2", "scipy<1.18", "opencv-python-headless<4.12"])
+    if check_only:
+        plan = install_requirements(requirements, check_only=True)
+        result.update(status=plan["status"], dependency_plan=plan,
+                      weights=reconstruction_weights_status(checkpoint_directory))
+        return result
+    weights = ensure_reconstruction_weights(checkpoint_directory, check_only=False)
+    result["weights"] = weights
+    if weights["status"] not in ("ready", "download_required"):
+        return weights
+    dependencies = install_requirements(requirements, allow_replacement=allow_replacement)
+    if dependencies["status"] not in ("ready", "installed"):
+        return dependencies
+    pinned_gaussians = install_requirements(
+        ["gsplat @ git+https://github.com/nerfstudio-project/gsplat.git@2323de5905d5e90e035f792fe65bad0fedd413e7"],
+        allow_replacement=allow_replacement)
+    if pinned_gaussians["status"] not in ("ready", "installed"):
+        return pinned_gaussians
+    # Texture baking and utils3d use these kernels even with OpenGL pose rendering.
+    # 纹理烘焙及 utils3d 需要这些内核；位姿使用 OpenGL 不免除重建依赖。
+    from wapr.source_setup import prepare_raster_source
+    prepare_raster_source(allow_replacement=allow_replacement)
+    # The caller supplies a mask; this inference path does not import SAM2.
+    # 调用者已提供 mask，此推理路径不导入 SAM2，不获取其无关源码。
+    sam3d_source = _checkout("sam-3d-objects", "https://github.com/facebookresearch/sam-3d-objects.git", SAM3D_REVISION, "sam3d")
+    utils_source = _checkout("utils3d", "https://github.com/EasternJournalist/utils3d.git", "3913c65d81e05e47b9f367250cf8c0f7462a0900")
+    moge_source = _checkout("MoGe", "https://github.com/microsoft/MoGe.git", "a8c37341bc0325ca99b9d57981cc3bb2bd3e255b")
+    pytorch3d_source = _checkout("pytorch3d", "https://github.com/facebookresearch/pytorch3d.git", "75ebeeaea0908c5527e7b1e305fbc7681382db47")
+    from wapr.resources import cache_dir
+    wheel_directory = Path(cache_dir()) / "native_wheels" / "pytorch3d"
+    wheel_directory.mkdir(parents=True, exist_ok=True)
+    environment = os.environ.copy()
+    environment["MAX_JOBS"] = "2"
+    environment["FORCE_CUDA"] = "1"
+    native_healthy = False
+    try:
+        from pytorch3d.ops import knn_points
+        points = torch.zeros((1, 2, 3), device="cuda")
+        nearest = knn_points(points, points, K=1)
+        native_healthy = bool(torch.isfinite(nearest.dists).all())
+    except Exception:
+        pass
+    # Build in the existing environment; isolated builders cannot see its Torch.
+    # 使用现有环境构建；隔离构建环境无法看到当前 Torch。
+    native_wheel = None
+    if not native_healthy:
+        build = subprocess.run([sys.executable, "-m", "pip", "wheel", "--no-deps", "--no-build-isolation",
+                                "--wheel-dir", str(wheel_directory), pytorch3d_source], env=environment)
+        if build.returncode != 0:
+            result.update(status="failed", reason="PyTorch3D native build failed / PyTorch3D 原生构建失败", exit_code=build.returncode)
+            return result
+        wheels = list(wheel_directory.glob("pytorch3d-*.whl"))
+        if len(wheels) != 1:
+            result.update(status="blocked", reason="Expected exactly one PyTorch3D wheel / 需要唯一 PyTorch3D wheel")
+            return result
+        native_wheel = str(wheels[0])
+        native = install_requirements([native_wheel], allow_replacement=allow_replacement)
+        if native["status"] not in ("ready", "installed"):
+            return native
+    for path in (sam3d_source, utils_source, moge_source):
+        if path not in sys.path:
+            sys.path.insert(0, path)
+    # An import proves setup completion, not inference success or a 16GB memory bound.
+    # 导入只证明准备完成，不等于推理成功或 16GB 显存可运行。
+    os.environ["LIDRA_SKIP_INIT"] = "true"
+    importlib.invalidate_caches()
+    try:
+        importlib.import_module("sam3d_objects.pipeline.inference_pipeline_pointmap")
+        import nvdiffrast.torch as raster
+        from gsplat import rasterization
+        context = raster.RasterizeCudaContext()
+        vertices = torch.tensor([[[-0.5, -0.5, 0, 1], [0.5, -0.5, 0, 1], [0, 0.5, 0, 1]]], device="cuda", dtype=torch.float32)
+        triangles = torch.tensor([[0, 1, 2]], device="cuda", dtype=torch.int32)
+        pixels, _ = raster.rasterize(context, vertices, triangles, resolution=[8, 8])
+        assert bool((pixels[..., 3] > 0).any())
+        colors, alpha, _ = rasterization(
+            means=torch.tensor([[0., 0., 3.]], device="cuda"),
+            quats=torch.tensor([[1., 0., 0., 0.]], device="cuda"),
+            scales=torch.full((1, 3), 0.1, device="cuda"),
+            opacities=torch.ones(1, device="cuda"), colors=torch.ones((1, 3), device="cuda"),
+            viewmats=torch.eye(4, device="cuda")[None],
+            Ks=torch.tensor([[[8., 0., 4.], [0., 8., 4.], [0., 0., 1.]]], device="cuda"), width=8, height=8)
+        assert bool(torch.isfinite(colors).all()) and bool((alpha > 0).any())
+        torch.cuda.synchronize()
+        del context, pixels, vertices, triangles, colors, alpha
+    except Exception as error:
+        detail = re.sub(r"https?://\S+", "[URL omitted / 地址已隐藏]", str(error))
+        result.update(status="blocked", reason="SAM3D inference import failed / SAM3D 推理导入失败: " + type(error).__name__ + " " + detail)
+        return result
+    result.update(status="ready", source=sam3d_source, native_wheel=native_wheel,
+                  source_paths=[sam3d_source, utils_source, moge_source],
+                  native_kernels_verified=True, inference_verified=False)
+    return result
+
+
+def reconstruct(rgb, mask, checkpoint_directory=None, allow_replacement=None):
+    """Run the existing uncompiled vertex-color mesh recipe on one RGB/mask.
+
+    在单张 RGB/mask 上执行已有未编译的顶点颜色网格方案；不改变推理步数。
+    """
+    from wapr.sam3d_isolated import SAM3D_ENV_ROOT
+    if os.path.realpath(sys.prefix) != os.path.realpath(SAM3D_ENV_ROOT):
+        from wapr.sam3d_isolated import reconstruct as reconstruct_isolated
+        return reconstruct_isolated(rgb, mask, checkpoint_directory=checkpoint_directory,
+                                    allow_replacement=allow_replacement)
+    prepared = prepare_reconstruction(allow_replacement=allow_replacement,
+                                      checkpoint_directory=checkpoint_directory)
+    if prepared["status"] != "ready":
+        raise RuntimeError("Reconstruction preparation stopped / 重建准备停止: " + str(prepared.get("reason", prepared["status"])))
+    import numpy as np
+    import torch
+    from hydra.utils import instantiate
+    from omegaconf import OmegaConf
+    if rgb.dtype != np.uint8 or rgb.ndim != 3 or rgb.shape[-1] != 3 or mask.shape != rgb.shape[:2]:
+        raise ValueError("Expected uint8 RGB and matching mask / 需要 uint8 RGB 与同尺寸 mask")
+    if int(np.count_nonzero(mask)) < 20:
+        raise ValueError("Object mask is too small / 物体 mask 太小")
+    config = OmegaConf.load(prepared["weights"]["pipeline"])
+    config.rendering_engine = "pytorch3d"
+    config.compile_model = False
+    config.workspace_dir = prepared["weights"]["directory"]
+    config.depth_model.model.pretrained_model_name_or_path = prepared["weights"]["moge"]
+    rgba = np.concatenate([rgb, ((mask > 0)[..., None] * 255).astype(np.uint8)], axis=2)
+    os.environ["LIDRA_SKIP_INIT"] = "true"
+    torch.cuda.empty_cache()
+    # SAM3D uses the official Torch Hub loader and its existing cache directly.
+    # SAM3D 直接使用官方 Torch Hub 加载器及已有缓存，不替换全局加载函数。
+    pipeline = instantiate(config)
+    with torch.no_grad():
+        output = pipeline.run(rgba, None, seed=42, stage1_only=False,
+                              with_mesh_postprocess=False, with_texture_baking=False,
+                              with_layout_postprocess=False, use_vertex_color=True)
+    mesh = output["glb"]
+    if len(mesh.vertices) == 0 or not np.isfinite(mesh.vertices).all():
+        raise RuntimeError("Reconstruction produced invalid vertices / 重建产生无效顶点")
+    del output
+    del pipeline
+    torch.cuda.empty_cache()
+    return mesh
