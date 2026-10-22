@@ -1,6 +1,6 @@
 # BiHOI Pipeline
 
-The multi-view hand–object interaction processing pipeline used to build the **BiHOI** dataset in [DONIC](../README.md). From synchronized multi-view videos it produces object masks, metric depth, an object mesh, 6D object poses, bimanual MANO hand reconstructions and a standardized export, driven from a Gradio WebUI.
+The multi-view hand–object interaction processing pipeline used to build the **BiHOI** dataset in [DONIC](../README.md) ([arXiv:2610.29997](https://arxiv.org/abs/2610.29997)). From synchronized multi-view videos it produces object masks, metric depth, an object mesh, 6D object poses, bimanual MANO hand reconstructions and a standardized export, driven from a Gradio WebUI.
 
 > **Before you start**
 >

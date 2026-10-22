@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use DONIC, please cite this technical report."
+message: "If you use DONIC, please cite our paper."
 title: "DONIC: Generalist Dexterous Bimanual Tracking Control from Human Demonstrations"
 type: software
 authors:
@@ -54,5 +54,9 @@ preferred-citation:
       given-names: Zhaoxi
     - family-names: Liu
       given-names: Ziwei
-  journal: "Ropedia Technical Report"
+  journal: "arXiv preprint arXiv:2610.29997"
+  identifiers:
+    - type: doi
+      value: "10.48550/arXiv.2610.29997"
+  url: "https://arxiv.org/abs/2610.29997"
   year: 2026
