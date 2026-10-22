@@ -37,6 +37,9 @@
     }
   });
 
+  const code = $('#hero-code');
+  if (code && site.codeUrl) { code.href = site.codeUrl; code.target = '_blank'; code.rel = 'noopener'; code.hidden = false; }
+
   /* ------------------------------------------------ nav state */
   const nav = $('#nav');
   const onScroll = () => nav.classList.toggle('scrolled', scrollY > 24);

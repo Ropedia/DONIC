@@ -13,14 +13,14 @@ window.DONIC = {
     ],
     affiliations: 'Ropedia',
     anonymousLine: 'Anonymous authors',  // shown only if the author list is emptied
-    paperUrl: '',                      // paper link; empty = button shows "soon"
-    codeUrl: '',
+    paperUrl: 'https://arxiv.org/abs/2610.29997', // paper link; empty = button shows "soon"
+    codeUrl: 'https://github.com/Ropedia/DONIC',  // code link; empty = Code button hidden
     datasetUrl: '',
     bibtex:
 `@article{sun2026donic,
   title   = {DONIC: Generalist Dexterous Bimanual Tracking Control from Human Demonstrations},
   author  = {Sun, Mingze and Cao, Ziang and Fei, Yuan and Tao, Qiankuan and Wang, Zihan and Liu, Tianqi and Chen, Junhao and Diao, Haiwen and Hong, Fangzhou and Chen, Zhaoxi and Liu, Ziwei},
-  journal = {Ropedia Technical Report},
+  journal = {arXiv preprint arXiv:2610.29997},
   year    = {2026}
 }`
   },
