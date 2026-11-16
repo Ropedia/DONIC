@@ -17,7 +17,7 @@ ipyevents==2.0.4
 ipython==9.17.1
 jaxtyping==0.3.11
 jupyter-client==7.4.9
-lightning==2.3.3
+lightning==2.6.6
 loguru==0.7.2
 matplotlib==3.11.1
 moderngl==5.12.0
