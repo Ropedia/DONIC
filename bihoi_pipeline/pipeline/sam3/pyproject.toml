@@ -39,7 +39,7 @@ dependencies = [
 dev = [
     "pytest",
     "pytest-cov",
-    "black==24.2.0",
+    "black==26.10.1",
     "ufmt==2.8.0",
     "ruff-api==0.1.0",
     "usort==1.0.2",
